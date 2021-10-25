@@ -1,6 +1,6 @@
 # Dashboard para las IES del Ecuador
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.25.
+Desarrollado por Diego Guaman, docente del IST Primero de Mayo, ciudad Yantzaza - Provincia de Zamora Chinchipe
 
 ## Development server
 
