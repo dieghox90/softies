@@ -10,5 +10,6 @@ export class Periodo {
     matriculas: Matricula[];
     distributivo: Distributivo;
     total_matriculas: number;
+    estado: boolean;
 
 }

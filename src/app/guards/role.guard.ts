@@ -38,7 +38,6 @@ export class RoleGuard implements CanActivate {
 
     if (next.data.role.some(ai => this.authService.hasRole(ai))) {
       let a = ai => this.authService.hasRole(ai);
-
       return true;
     }
 

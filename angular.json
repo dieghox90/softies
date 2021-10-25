@@ -39,8 +39,7 @@
               "./node_modules/bootstrap/dist/js/bootstrap.min.js",
               "src/assets/js/adminlte.min.js",
               "src/assets/js/jquery.overlayScrollbars.min.js"
-            ],
-            "rebaseRootRelativeCssUrls": true
+            ]
           },
           "configurations": {
             "production": {
@@ -53,7 +52,6 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
               "extractLicenses": true,
               "vendorChunk": false,

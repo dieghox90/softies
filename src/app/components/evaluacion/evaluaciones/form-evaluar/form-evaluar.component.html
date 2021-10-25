@@ -1,112 +1,122 @@
-<div *ngIf="evaluacion?.id==null">
-    <h3 class="text-center text-secondary py-3">Evaluación Docente</h3>
-    <div class="alert alert-w">
-        Debe seleccionar una evaluación
-    </div>
+<div style="margin-top: 80px;" *ngIf="cargando" class="alert alert-info p-3 text-center" role="alert">
+    <h2 class="text-center">Cargando!!</h2>
+    <i class="fas fa-spinner fa-spin fa-3x"></i>
+    <p class="mb-0">Por favor espere</p>
 </div>
 
 
-
-
-
-
-<div *ngIf="evaluacion?.id">
-
-    <div class="position-relative text-center">
-        <button (click)="regresar()" style="position: absolute;left: 5px;"
-            class="float-left btn btn-warning btn-sm my-3"> <i class="fas fa-undo-alt"></i>
-            Regresar</button>
-        <h3 class="text-center text-secondary py-3">{{evaluacion?.clasificacion?.nombre}}</h3>
-    </div>
-
-
-
-    <div *ngIf="evaluacion?.preguntas?.length==0">
+<div *ngIf="!cargando">
+    <div *ngIf="evaluacion?.id==null">
+        <h3 class="text-center text-secondary py-3">Evaluación Docente</h3>
         <div class="alert alert-w">
-            Esta evaluación no tiene preguntas asociadas, comunícate con el Administrador
+            Debe seleccionar una evaluación
         </div>
     </div>
 
-    <div *ngIf="evaluacion?.preguntas?.length>0">
 
-        <div>
-            <h5 class="badge badge-info" style="font-size: 15px;">Docente a evaluar</h5>
-            <p style="font-size: 17px;">{{evaluacion?.nombre_evaluado}}</p>
+
+
+
+
+    <div *ngIf="evaluacion?.id">
+
+        <div class="position-relative text-center">
+            <button (click)="regresar()" style="position: absolute;left: 5px;"
+                class="float-left btn btn-warning btn-sm my-3"> <i class="fas fa-undo-alt"></i>
+                Regresar</button>
+            <h3 class="text-center text-secondary py-3">{{evaluacion?.clasificacion?.nombre}}</h3>
         </div>
 
-        <div *ngIf="authService.hasRole('ROLE_ESTUDIANTE')">
-            <h5 class="badge badge-primary" style="font-size: 15px;">Asignatura</h5>
-            <p style="font-size: 17px;">{{evaluacion?.asignatura}}</p>
 
-            <h5 class="badge badge-primary" style="font-size: 15px;">Paralelo</h5>
-            <p style="font-size: 17px;">{{evaluacion?.paralelo}}</p>
-        </div>
 
-        <h4 class="text-secondary py-1 text-center">Cuestionario</h4>
-        <div *ngFor="let criterio of criterios">
-
-            <div class="alerta alert-su text-center ">
-                <strong>Dominio: </strong>{{criterio.nombre}}
+        <div *ngIf="evaluacion?.preguntas?.length==0">
+            <div class="alert alert-w">
+                Esta evaluación no tiene preguntas asociadas, comunícate con el Administrador
             </div>
-            <div class="accordion" id="accordionExample">
-                <div class="card" *ngFor="let subcriterio of criterio.subcriterios;let i = index">
-                    <div class="card-header bg-secondary" id=" headingOne">
-                        <h5>
-                            <button class="btn btn-link text-white" type="button" data-toggle="collapse"
-                                attr.data-target="#subcriterio{{subcriterio.id}}" aria-expanded="true"
-                                aria-controls="collapseOne">
-                                <strong>Subdominio:</strong> {{subcriterio.nombre}} <i
-                                    class="fas fa-chevron-circle-down"></i>
-                            </button>
-                        </h5>
-                        <span style="margin-top: -15px;" class="float-right badge badge-warning">Preguntas:
-                            {{subcriterio.preguntas.length}}</span>
-                        <br>
-                        <span style="margin-top: -15px;"
-                            [ngClass]="{'badge-danger': subcriterio.numero_respondidas==0, 'badge-info':subcriterio.numero_respondidas>0 }"
-                            class="badge float-right ">Respuestas Guardadas:
-                            {{subcriterio.numero_respondidas}}</span>
-                    </div>
+        </div>
 
-                    <div id="subcriterio{{subcriterio.id}}" class="collapse" aria-labelledby="headingOne"
-                        data-parent="#accordionExample">
-                        <div class="card-body">
-                            <form>
-                                <div *ngFor="let p of subcriterio.preguntas;let j = index">
+        <div *ngIf="evaluacion?.preguntas?.length>0">
 
-                                    <div><strong>{{j+1}}) {{p.enunciado}}</strong></div>
-                                    <div style="margin:12px"
-                                        *ngFor="let tipo of p.tipo_pregunta.tipo_respuestas;let m = index"
-                                        class="custom-control custom-radio custom-control-inline">
-                                        <input (click)="seleccionarRespuesta($event,tipo,p)" type="radio"
-                                            id="radio{{p.id}}{{m}}" [checked]="tipo.estado" attr.name="radio{{p.id}}"
-                                            class="custom-control-input">
-                                        <label style="font-weight: normal !important;" class="custom-control-label"
-                                            for="radio{{p.id}}{{m}}">{{tipo.nombre}}</label>
-                                    </div>
-                                    <hr>
-                                </div>
+            <div>
+                <h5 class="badge badge-info" style="font-size: 15px;">Docente a evaluar</h5>
+                <p style="font-size: 17px;">{{evaluacion?.nombre_evaluado}}</p>
+            </div>
 
-                            </form>
+            <div *ngIf="authService.hasRole('ROLE_ESTUDIANTE')">
+                <h5 class="badge badge-primary" style="font-size: 15px;">Asignatura</h5>
+                <p style="font-size: 17px;">{{evaluacion?.asignatura}}</p>
 
+                <h5 class="badge badge-primary" style="font-size: 15px;">Paralelo</h5>
+                <p style="font-size: 17px;">{{evaluacion?.paralelo}}</p>
+            </div>
 
+            <h4 class="text-secondary py-1 text-center">Cuestionario</h4>
+            <div *ngFor="let criterio of criterios">
 
+                <div class="alerta alert-su text-center ">
+                    <strong>Dominio: </strong>{{criterio.nombre}}
+                </div>
+                <div class="accordion" id="accordionExample">
+                    <div class="card" *ngFor="let subcriterio of criterio.subcriterios;let i = index">
+                        <div class="card-header bg-secondary" id=" headingOne">
+                            <h5>
+                                <button class="btn btn-link text-white" type="button" data-toggle="collapse"
+                                    attr.data-target="#subcriterio{{subcriterio.id}}" aria-expanded="true"
+                                    aria-controls="collapseOne">
+                                    <strong>Subdominio:</strong> {{subcriterio.nombre}} <i
+                                        class="fas fa-chevron-circle-down"></i>
+                                </button>
+                            </h5>
+                            <span style="margin-top: -15px;" class="float-right badge badge-warning">Preguntas:
+                                {{subcriterio.preguntas.length}}</span>
+                            <br>
+                            <span style="margin-top: -15px;"
+                                [ngClass]="{'badge-danger': subcriterio.numero_respondidas==0, 'badge-info':subcriterio.numero_respondidas>0 }"
+                                class="badge float-right ">Respuestas Guardadas:
+                                {{subcriterio.numero_respondidas}}</span>
                         </div>
+
+                        <div id="subcriterio{{subcriterio.id}}" class="collapse show" aria-labelledby="headingOne"
+                            data-parent="#accordionExample">
+                            <div class="card-body">
+                                <form>
+                                    <div *ngFor="let p of subcriterio.preguntas;let j = index">
+
+                                        <div><strong>{{j+1}}) {{p.enunciado}}</strong></div>
+                                        <div style="margin:12px"
+                                            *ngFor="let tipo of p.tipo_pregunta.tipo_respuestas;let m = index"
+                                            class="custom-control custom-radio custom-control-inline">
+                                            <input (click)="seleccionarRespuesta($event,tipo,p)" type="radio"
+                                                id="radio{{p.id}}{{m}}" [checked]="tipo.estado"
+                                                attr.name="radio{{p.id}}" class="custom-control-input">
+                                            <label style="font-weight: normal !important;" class="custom-control-label"
+                                                for="radio{{p.id}}{{m}}">{{tipo.nombre}}</label>
+                                        </div>
+                                        <hr>
+                                    </div>
+
+                                </form>
+
+
+
+                            </div>
+                        </div>
+
+
                     </div>
 
 
                 </div>
-
-
+                <hr class="my-4">
             </div>
-            <hr class="my-4">
+
+
+
+            <button style="margin-bottom: 20px;" (click)="crear()" class="btn btn-primary w-100"><i
+                    class="fas fa-download"></i>
+                Guardar Respuestas
+            </button>
         </div>
-
-
-
-        <button style="margin-bottom: 20px;" (click)="crear()" class="btn btn-primary w-100"><i
-                class="fas fa-download"></i>
-            Guardar Respuestas
-        </button>
     </div>
+
 </div>

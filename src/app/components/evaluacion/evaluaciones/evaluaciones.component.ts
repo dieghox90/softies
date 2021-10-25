@@ -33,25 +33,39 @@ export class EvaluacionesComponent implements OnInit {
   id: number;
   habilitado = false;
 
+  num_preguntasDocencia: number;
+  num_preguntasInvestigacion: number;
+  num_preguntasVinculacion: number;
+  num_preguntasGestionInstitucional: number;
+
+  cargando: boolean;
+
   constructor(private location: Location, private localService: LocalService, private spinnerService: NgxSpinnerService, private respuestaService: RespuestaService, private cargaService: CargaHorariaService, private matriculaService: MatriculaService, public authService: AuthService, private serviceDatosEvaluacion: DatosEvaluacionService, private router: Router, private activatedRoute: ActivatedRoute, private serviceEvaluacion: EvaluacionService) {
     this.evaluacionDocente = new Evaluacion();
     this.evaluacionDocente.clasificacion = new Clasificacion();
     this.evaluaciones = [];
+    this.num_preguntasGestionInstitucional = 0;
+    this.num_preguntasDocencia = 0;
+    this.num_preguntasInvestigacion = 0;
+    this.num_preguntasVinculacion = 0;
+    
+
   }
 
   ngOnInit() {
-    this.spinnerService.show();
     this.activatedRoute.paramMap.subscribe(params => {
       this.id = +params.get("id");
+      this.cargando = true;
+      
       if (this.id) {
         this.evaluaciones = [];
         this.serviceEvaluacion.verPeriodo(this.id, this.idP).subscribe(ev => {
           this.evaluacion = ev;
-          console.log(this.evaluacion);
           if (this.evaluacion != null) {
 
             //------ Autoevaluacion -------
             if (this.evaluacion.clasificacion.nombre == "Autoevaluación" && this.authService.hasRole('ROLE_DOCENTE')) {
+              
               this.evaluacionDocente = new Evaluacion();
               this.evaluacionDocente.clasificacion = new Clasificacion();
               this.evaluacionDocente.id = this.evaluacion.id;
@@ -70,17 +84,20 @@ export class EvaluacionesComponent implements OnInit {
                   if (resp.length != 0) {
                     e.avance = resp.length;
                   }
+                  this.cargando = false;
                 });// *** FIN AVANCE ***/
               });
+
+              
 
 
               //----Coevaluacion - Pares Academicos ----
             } else if (this.evaluacion.clasificacion.nombre == "Coevaluación - Pares Académicos" && this.authService.hasRole('ROLE_DOCENTE')) {
               if (this.evaluacion.evaluadores.length > 0) {
+                
                 this.evaluacion.evaluadores.forEach(ev => {
                   if (ev.id_evaluador == this.authService.usuario.index) {
                     ev.evaluados.forEach(evaluado => {
-                      console.log(evaluado);
                       this.evaluacionDocente = new Evaluacion();
                       this.evaluacionDocente.clasificacion = new Clasificacion();
                       this.evaluacionDocente.id = this.evaluacion.id;
@@ -100,70 +117,93 @@ export class EvaluacionesComponent implements OnInit {
                       if (resp.length != 0) {
                         e.avance = resp.length;
                       }
+                      this.cargando = false;
+                      
                     });// *** FIN AVANCE ***/
                   });
 
-
-
                 });
+              } else {
+                this.cargando = false;
               }
             } else if (this.evaluacion.clasificacion.nombre == "Heteroevaluación" && this.authService.hasRole('ROLE_ESTUDIANTE')) {
+              
+              console.log(this.authService.usuario);
               this.matriculaService.listarMatriculaEvaluacion(this.authService.usuario.index, this.idP).subscribe(m => {
                 let matriculas: Matricula[];
                 matriculas = m;
-                console.log(matriculas);
                 if (matriculas != null) {
                   matriculas.forEach(mat => {
+                    if (mat.matriculas_asignaturas.length > 0) {
 
-                    this.cargaService.listarCargaPeriodoParalelo(mat.periodo_lectivo.id, mat.paralelo.id).forEach(c => {
-                      let cargas: CargaHoraria[];
-                      cargas = c;
-                      if (cargas != null) {
-                        console.log(cargas);
-                        cargas.forEach(ch => {
-                          this.evaluacionDocente = new Evaluacion();
-                          this.evaluacionDocente.clasificacion = new Clasificacion();
-                          this.evaluacionDocente.id = this.evaluacion.id;
-                          this.evaluacionDocente.fecha_fin = this.evaluacion.fecha_fin;
-                          this.evaluacionDocente.id_evaluador = this.authService.usuario.index;
-                          this.evaluacionDocente.nombre_evaluado = ch.docente.nombre + " " + ch.docente.apellido;
-                          this.evaluacionDocente.numero_preguntas = this.evaluacion.preguntas.length;
-                          this.evaluacionDocente.clasificacion.nombre = this.evaluacion.clasificacion.nombre;
-                          this.evaluacionDocente.id_evaluado = ch.docente.id;
-                          this.evaluacionDocente.asignatura = ch.asignatura.nombre;
-                          this.evaluacionDocente.id_asignatura = ch.asignatura.id;
-                          this.evaluacionDocente.id_paralelo = ch.paralelo.id;
-                          this.evaluacionDocente.paralelo = ch.paralelo.nombre;
-                          this.evaluaciones.push(this.evaluacionDocente);
-                        });
+                      this.cargaService.listarCargaPeriodoParalelo(mat.periodo_lectivo.id, mat.paralelo.id).forEach(c => {
+                        let cargas: CargaHoraria[];
+                        cargas = c;
+                        if (cargas != null) {
+                          console.log(cargas);
+                          cargas.forEach(ch => {
+                            this.evaluacionDocente = new Evaluacion();
+                            this.evaluacionDocente.clasificacion = new Clasificacion();
+                            this.evaluacionDocente.id = this.evaluacion.id;
+                            this.evaluacionDocente.fecha_fin = this.evaluacion.fecha_fin;
+                            this.evaluacionDocente.id_evaluador = this.authService.usuario.index;
+                            this.evaluacionDocente.nombre_evaluado = ch.docente.nombre + " " + ch.docente.apellido;
+                            this.evaluacionDocente.numero_preguntas = this.evaluacion.preguntas.length;
+                            this.evaluacionDocente.clasificacion.nombre = this.evaluacion.clasificacion.nombre;
+                            this.evaluacionDocente.id_evaluado = ch.docente.id;
+                            this.evaluacionDocente.asignatura = ch.asignatura.nombre;
+                            this.evaluacionDocente.id_asignatura = ch.asignatura.id;
+                            this.evaluacionDocente.id_paralelo = ch.paralelo.id;
+                            this.evaluacionDocente.paralelo = ch.paralelo.nombre;
+                            this.evaluaciones.push(this.evaluacionDocente);
+                          });
 
 
 
-                        this.evaluaciones.forEach(e => {
-                          // *** AGREGNADO AVANCE ***/
+                          this.evaluaciones.forEach(e => {
+                            // *** AGREGNADO AVANCE ***/
 
-                          this.respuestaService.listarRespuestas(e.id_evaluado, this.evaluacion.id, this.authService.usuario.index).subscribe(resp => {
-                            if (resp.length != 0) {
-                              resp.forEach(r => {
-                                if (r.asignatura_id == e.id_asignatura && r.paralelo_id == e.id_paralelo) {
-                                  e.avance++;
-                                }
-                              });
-                            }
-                          });// *** FIN AVANCE ***/
+                            this.respuestaService.listarRespuestas(e.id_evaluado, this.evaluacion.id, this.authService.usuario.index).subscribe(resp => {
+                              if (resp.length != 0) {
+                                resp.forEach(r => {
+                                  if (r.asignatura_id == e.id_asignatura && r.paralelo_id == e.id_paralelo) {
+                                    e.avance++;
+                                  }
+                                });
+                              }
+                              this.cargando = false;
+                            });// *** FIN AVANCE ***/
 
-                        });
-                      }
-                    });
+                          });
+                        }
+                      });
+                    }
 
                   });
                 }
 
               });
 
-            } else if (this.evaluacion.clasificacion.nombre == "Coevaluación - Directivos a Docentes" && this.authService.hasRole('ROLE_DOCENTE')) {
-
+            } else if ((this.evaluacion.clasificacion.nombre == "Coevaluación - Directivos a Docentes") && (this.authService.hasRole('ROLE_DOCENTE') || this.authService.hasRole('ROLE_RECTOR'))) {
               if (this.evaluacion.evaluadores.length > 0) {
+                this.num_preguntasDocencia = 0;
+                this.num_preguntasGestionInstitucional = 0;
+                this.num_preguntasInvestigacion = 0;
+                this.num_preguntasVinculacion = 0;
+
+                this.evaluacion.preguntas.forEach(p => {
+                  if (p.subcriterio.criterio.nombre == "Docencia") {
+                    this.num_preguntasDocencia++;
+                  } else if (p.subcriterio.criterio.nombre == "Investigación") {
+                    this.num_preguntasInvestigacion++;
+                  } else if (p.subcriterio.criterio.nombre == "Vinculación con la Sociedad") {
+                    this.num_preguntasVinculacion++;
+                  } else if (p.subcriterio.criterio.nombre == "Gestión Académica") {
+                    this.num_preguntasGestionInstitucional++;
+                  }
+                });
+
+
                 this.evaluacion.evaluadores.forEach(ev => {
                   if (ev.id_evaluador == this.authService.usuario.index) {
                     ev.evaluados.forEach(evaluado => {
@@ -191,14 +231,19 @@ export class EvaluacionesComponent implements OnInit {
                     if (resp.length != 0) {
                       e.avance = resp.length;
                     }
+                    this.cargando = false;
                   });// *** FINA AVANCE ***/
                 });
+              } else {
+               
+                  this.cargando = false;
+                
               }
 
             } else {
               //no tienes acceso a este recurso
               this.evaluacion = null;
-              this.spinnerService.hide();
+              this.cargando = false;
             }
 
             // ------ Desahabilitar la Fecha --------
@@ -211,7 +256,7 @@ export class EvaluacionesComponent implements OnInit {
 
           }
 
-          this.spinnerService.hide();
+
         });
       }
     });

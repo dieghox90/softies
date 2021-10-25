@@ -8,8 +8,10 @@ import { Observable, throwError } from 'rxjs';
 import swal from 'sweetalert2';
 import { catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { AuthService } from '../services/auth.service';
+
 import Swal from 'sweetalert2';
+import { AuthService } from '../services/auth.service';
+
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -32,10 +34,13 @@ export class AuthInterceptor implements HttpInterceptor {
                 }
 
                 //esta autenticado pero no tiene los roless asi que se va al home
+                
                 if (e.status == 403) {
                     Swal.fire('Acceso denegado', `Hola ${this.authService.usuario.username} no tienes acceso a este recurso!`, 'warning');
-                    this.router.navigate(['/home']);
+                    this.router.navigate(['/welcome']);
                 }
+
+
                 return throwError(e);
             })
         );

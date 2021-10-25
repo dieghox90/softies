@@ -1,0 +1,87 @@
+
+<h3 class="text-center text-secondary py-3">REPOSITORIO</h3>
+
+<div class="card">
+    <div class="card-header bg-info">
+        Formulario de Búsqueda
+    </div>
+
+    <div class="card-body">
+
+           <form>
+            <label class="font-weight-bold">Carrera:</label>
+            <mat-form-field class="w-100">
+                <mat-select [(value)]="carrera">
+                    <mat-option [value]="undefined">--- Seleccione una Carrera ---</mat-option>
+                    <mat-option *ngFor="let c of carreras" [value]="c">{{c.nombre}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <br>
+            <mat-form-field class="w-100">
+                <label class="font-weight-bold">Ciclo:</label>
+                <mat-select [(value)]="ciclo">
+                    <mat-option [value]="undefined">--- Seleccione una Ciclo ---</mat-option>
+                    <mat-option *ngFor="let c of carrera.ciclos" [value]="c">{{c.nombre}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+
+
+            <div class="form-group">
+                <button (click)="buscar()" class=" btn btn-success">
+                    <i class="fas fa-search"></i>
+                    Buscar
+                </button>
+            </div>
+        </form>
+        
+
+    </div>
+</div>
+
+<hr>
+<h2 class=" text-secondary">Listado</h2>
+<div *ngIf="planificacionesAcademicas.length==0 " class="alerta alert-w">
+    No hay registros
+</div>
+
+<table *ngIf="planificacionesAcademicas.length>0" class="table table-striped">
+    <thead class="bg-info text-white">
+        <tr>
+            <th>Nombre</th>
+            <th>Paralelo</th>
+            <th>Guía</th>
+            <th>Silabo</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr *ngFor="let plani of planificacionesAcademicas">
+            <td>{{plani.nombre_asignatura}}</td>
+            <td>{{plani.nombre_paralelo}}</td>
+            <td>
+
+
+                <a *ngIf="plani.ruta_guia!=null" style="text-decoration: underline"
+                href="{{rutaArchivos+plani.ruta_guia+'/'+plani.guia}}">Documento:
+                {{plani.guia}}</a>
+
+                <div class="text-danger" *ngIf="plani.ruta_guia==null">
+                    No Disponible
+                </div>
+                
+            </td>
+            <td>
+                <a *ngIf="plani.ruta_silabo!=null" style="text-decoration: underline"
+                href="{{rutaArchivos+plani.ruta_silabo+'/'+plani.silabo}}">Documento:
+                {{plani.guia}}</a>
+
+                <div class="text-danger" *ngIf="plani.ruta_silabo==null">
+                    No Disponible
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>

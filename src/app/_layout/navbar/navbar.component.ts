@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Periodo } from 'src/app/models/periodo';
 import { PeriodoService } from 'src/app/services/periodo.service';
 import { Router } from '@angular/router';
@@ -13,6 +13,7 @@ import { MatriculaService } from 'src/app/services/matricula.service';
 import { Matricula } from 'src/app/models/matricula';
 import { MatriculaAsignatura } from 'src/app/models/matricula-asignatura';
 import { CargaHorariaService } from 'src/app/services/carga-horaria.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 
 declare var $: any;
@@ -22,7 +23,7 @@ declare var $: any;
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent implements OnInit, OnDestroy {
 
   periodos: Periodo[];
   periodo: Periodo;
@@ -30,14 +31,15 @@ export class NavbarComponent implements OnInit {
   evaluaciones: Evaluacion[];
   periodoActual: Periodo;
   asignaturas_matricula: MatriculaAsignatura[];
-  constructor(private cargaHorariaService: CargaHorariaService, private serviceMatricula: MatriculaService, private localService: LocalService, public authService: AuthService, private serviceEvaluacion: EvaluacionService, private router: Router, private servicePeriodo: PeriodoService, private serviceDocente: DocenteService) {
+  constructor(private spinnerService: NgxSpinnerService,private cargaHorariaService: CargaHorariaService, private serviceMatricula: MatriculaService, private localService: LocalService, public authService: AuthService, private serviceEvaluacion: EvaluacionService, private router: Router, private servicePeriodo: PeriodoService, private serviceDocente: DocenteService) {
     this.periodos = [];
     this.periodo = new Periodo();
     this.docenteLogin = new Docente();
     this.docenteLogin.cargas_horarias = [];
     this.periodoActual = new Periodo();
     this.asignaturas_matricula = [];
-
+  }
+  ngOnDestroy(): void {
   }
 
 
@@ -49,8 +51,9 @@ export class NavbarComponent implements OnInit {
     this.servicePeriodo.listarShort().subscribe(p => {
       this.periodos = p;
 
+
       // esto solo es en evaluacion para eliminar el periodo actual ----- elminaaaar
-     // this.periodos = this.periodos.filter(p => p.id != 3 && p.id != 4);
+      // this.periodos = this.periodos.filter(p => p.id != 3 && p.id != 4);
 
       if (this.localService.getJsonValue('idP') == null) {
         let arrayFechas = this.periodos.map((pe) => new Date(pe.fecha_fin));
@@ -97,7 +100,7 @@ export class NavbarComponent implements OnInit {
 
 
         /* -- Cargar las evaluaciones -- */
-        this.serviceEvaluacion.listar(this.localService.getJsonValue('idP')).subscribe(e => {
+        this.serviceEvaluacion.listarSinRelaciones(this.localService.getJsonValue('idP')).subscribe(e => {
           this.evaluaciones = e;
         });
       }
@@ -117,23 +120,54 @@ export class NavbarComponent implements OnInit {
 
   onChange(p: any) {
     //    this.localService.clearToken();
-
+    this.spinnerService.show();
     this.localService.setJsonValue('idP', p.id);
     this.localService.setJsonValue('nomP', p.periodo_academico);
-    //location.reload();
-    //location.href = "/sga/home";
 
-    // en analisis- ---
-    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-    this.router.onSameUrlNavigation = 'reload';
-    this.router.navigate(['/home']);
-    Swal.fire('Información', 'Ha cambiado de periodo académico con éxito', 'info');
 
-    //this.router.navigateByUrl('/');
+    if (this.authService.hasRole('ROLE_DOCENTE') || this.authService.hasRole('ROLE_ADMIN')
+      || this.authService.hasRole('ROLE_ESTUDIANTE')) {
 
+      if (this.authService.hasRole('ROLE_DOCENTE') || this.authService.hasRole('ROLE_ADMIN')) {
+
+        this.serviceDocente.listarCargaHoraria(this.authService.usuario.index, this.localService.getJsonValue('idP')).subscribe(d => {
+          this.docenteLogin = d;
+          this.cargarEvaluaciones();
+        });
+      } else if (this.authService.hasRole('ROLE_ESTUDIANTE')) {
+        // es el mismo metodo que utilizamos en el proceso de evaluacion al docente
+        this.serviceMatricula.listarMatriculaEvaluacion(this.authService.usuario.index, this.localService.getJsonValue('idP')).subscribe(m => {
+
+          m.forEach(mat => {
+            mat.matriculas_asignaturas.forEach(asig => {
+              this.asignaturas_matricula.push(asig);
+              asig.matricula = mat;
+              this.cargarEvaluaciones();
+
+            });
+          });
+        });
+
+      }
+
+    }
 
 
   }
+
+
+  // Cargar las evaluaciones
+
+  public cargarEvaluaciones() {
+
+    this.serviceEvaluacion.listarSinRelaciones(this.localService.getJsonValue('idP')).subscribe(e => {
+      this.evaluaciones = e;
+      this.router.navigate(['/home']);
+      this.spinnerService.hide();
+      Swal.fire('Información', 'Ha cambiado de periodo académico con éxito', 'info');
+    });
+  }
+
 
 
   // Esto es del estudiante

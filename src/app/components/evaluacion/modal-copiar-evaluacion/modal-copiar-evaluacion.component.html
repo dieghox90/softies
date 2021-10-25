@@ -32,8 +32,8 @@
 
                         <tbody>
                             <tr *ngFor="let e of evaluaciones">
-                                <td>{{e.etiqueta}}</td>
-                                <td>{{e.preguntas.length}}</td>
+                                <td>{{e?.etiqueta}}</td>
+                                <td>{{e?.preguntas?.length}}</td>
                             </tr>
                         </tbody>
                     </table>

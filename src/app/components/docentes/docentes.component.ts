@@ -22,16 +22,17 @@ export class DocentesComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(private spinnerService: NgxSpinnerService, private service: DocenteService) { }
+  constructor(private spinnerService: NgxSpinnerService, private service: DocenteService) { 
+  }
 
   ngOnInit() {
     this.spinnerService.show();
 
     //realiza la primera paginacion
     this.calcularRangos();
-    setTimeout(() => {
-      this.spinnerService.hide();
-    }, 800);
+    
+
+    
   }
 
   //cuando se hace click en el pie de la tabla para pagina, sellama a la base de datos
@@ -52,12 +53,12 @@ export class DocentesComponent implements OnInit {
         this.docentes = p.content as Docente[];
         this.totalRegistros = p.totalElements as number;
         this.paginator._intl.itemsPerPageLabel = "Registros por pagina";
-
+        this.spinnerService.hide();
       });
   }
 
   public eliminar(docente: Docente): void {
-    this.spinnerService.show();
+    
     Swal.fire({
       title: "INACTIVACIÓN",
       html: "¿Desea inactivar a <strong>" + docente.nombre + " " + docente.apellido + "</strong>?",
@@ -68,6 +69,7 @@ export class DocentesComponent implements OnInit {
       confirmButtonText: "SI"
     }).then(result => {
       if (result.value) {
+        this.spinnerService.show();
         this.service.inactivar(docente).subscribe(() => {
           this.calcularRangos();
           Swal.fire({
@@ -75,10 +77,11 @@ export class DocentesComponent implements OnInit {
             html: "Docente <strong>" + docente.nombre + " " + docente.apellido + "</strong> inactivado con exito",
             icon: "success"
           });
+          this.spinnerService.hide();
         });
       }
     });
-    this.spinnerService.hide();
+  
   }
 
 

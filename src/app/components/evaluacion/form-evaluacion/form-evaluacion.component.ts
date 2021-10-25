@@ -13,6 +13,7 @@ import { LocalService } from 'src/app/services/local.service';
 
 
 
+
 @Component({
   selector: 'app-form-evaluacion',
   templateUrl: './form-evaluacion.component.html',
@@ -29,6 +30,12 @@ export class FormEvaluacionComponent implements OnInit {
   periodos: Periodo[];
   fecha: Date;
 
+  // Date time picker
+  public minDate: Date = new Date ("05/07/2017 2:00 AM");
+ 
+  public maxDate: Date = new Date ("05/27/2025 11:00 AM");
+
+  
 
   constructor(private localService: LocalService, private datepipe: DatePipe, private spinnerService: NgxSpinnerService, private activatedRoute: ActivatedRoute, private servicePeriodo: PeriodoService, private router: Router, private service: EvaluacionService, private serviceClasificaion: ClasificacionService) {
     this.clasificacion = new Clasificacion();

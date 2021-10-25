@@ -8,8 +8,9 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { EstudiantesComponent } from "./components/estudiantes/estudiantes.component";
 
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
-import { FormEstudianteComponent } from './components/estudiantes/form-estudiante/form-estudiante.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+import { FormEstudianteComponent } from './components/estudiantes/form-estudiante/form-estudiante.component';
 import { DocentesComponent } from './components/docentes/docentes.component';
 import { FormDocenteComponent } from './components/docentes/form-docente/form-docente.component';
 import { MatPaginatorModule } from "@angular/material/paginator";
@@ -63,11 +64,11 @@ import { AppLayoutComponent } from './_layout/app-layout/app-layout.component';
 import { NavbarComponent } from './_layout/navbar/navbar.component';
 import { HomeComponent } from './components/home/home.component';
 import { TokenInterceptor } from './interceptors/token.interceptor';
-import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { AuthInterceptor } from 'c:/Users/diegog/Desktop/pp/src/app/interceptors/auth.interceptor';
 import { ResultadosComponent } from './components/evaluacion/resultados/resultados.component';
 import { DetalleModalComponent } from './components/evaluacion/resultados/detalle-modal/detalle-modal.component';
 
-import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
+
 import { MatRadioModule } from '@angular/material/radio';
 
 //tabla
@@ -90,15 +91,18 @@ import { AsignaturaPlanesComponent } from './components/estudiantes/asignatura-p
 import { SeguimientoDocenteComponent } from './components/seguimiento-docente/seguimiento-docente.component';
 import { ConfiguracionComponent } from './components/seguimiento-docente/configuracion/configuracion.component';
 import { IncrementadorComponent } from './components/incrementador/incrementador.component';
+import { RepositorioComponent } from './components/repositorio/repositorio.component';
 
 
+// Fecha y hora
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from '@danielmoncada/angular-datetime-picker';
 
 registerLocaleData(localeES, 'es');
 
 @NgModule({
   declarations: [AppComponent,
-    EstudiantesComponent,
     NavbarComponent,
+    EstudiantesComponent,
     FormEstudianteComponent,
     DocentesComponent,
     FormDocenteComponent,
@@ -148,6 +152,8 @@ registerLocaleData(localeES, 'es');
     SeguimientoDocenteComponent,
     ConfiguracionComponent,
     IncrementadorComponent,
+    RepositorioComponent,
+
   ],
   imports: [
     BrowserModule,
@@ -164,9 +170,7 @@ registerLocaleData(localeES, 'es');
     MatDividerModule,
     MatTableModule,
     NgxSpinnerModule,
-    OwlDateTimeModule,
-    OwlNativeDateTimeModule,
-    BrowserAnimationsModule,
+    BrowserAnimationsModule,OwlDateTimeModule, OwlNativeDateTimeModule,
     ToastrModule.forRoot(),
   ],
   providers: [

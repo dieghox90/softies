@@ -25,6 +25,11 @@ export class EvaluacionService {
     return this.http.get<Evaluacion[]>(this.baseEndPoint + "/periodo/" + id);
   }
 
+  public listarSinRelaciones(id: number): Observable<Evaluacion[]> {
+    return this.http.get<Evaluacion[]>(this.baseEndPoint + "/no-relations/periodo/" + id);
+  }
+  
+
   public crear(evaluacion: Evaluacion): Observable<Evaluacion> {
     return this.http.post<Evaluacion>(this.baseEndPoint, evaluacion, { headers: this.cabeceras });
   }

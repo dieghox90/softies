@@ -14,7 +14,11 @@ import { DistributivoService } from 'src/app/services/distributivo.service';
 import Swal from 'sweetalert2';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { LocalService } from 'src/app/services/local.service';
+import { HttpEventType } from '@angular/common/http';
 
+import { GlobalVariable } from 'src/app/Globals/variables';
+
+declare var $:any;
 
 @Component({
   selector: 'app-carga-horaria',
@@ -41,6 +45,14 @@ export class CargaHorariaComponent implements OnInit {
 
   idP = this.localService.getJsonValue('idP');
 
+  public archivoSeleccionado: File;
+  progreso: number = 0;
+  tipoArchivo: string = "";
+
+  rutaArchivo: string;
+
+
+
   @ViewChild(ModalAsignacionComponent) modalComponent: ModalAsignacionComponent;
 
 
@@ -55,6 +67,10 @@ export class CargaHorariaComponent implements OnInit {
     this.cargassHorariasAux = [];
     this.docentes = [];
     this.distributivo.cargas_horarias = [];
+    this.rutaArchivo = GlobalVariable.URL_DOCS_PLANIFICACION;
+
+    //esto es nuevo
+    this.archivoSeleccionado = null;
   }
 
 
@@ -226,7 +242,6 @@ export class CargaHorariaComponent implements OnInit {
   public guardar(docente: Docente): void {
 
     this.spinnerService.show();
-    this.distributivo.documento = "";
     this.distributivo.periodo = this.periodo;
     this.distributivo.cargas_horarias = docente.cargas_horarias;
     /*
@@ -277,12 +292,8 @@ export class CargaHorariaComponent implements OnInit {
 
 
   public editar(docente: Docente): void {
-
     this.spinnerService.show();
-
     this.distributivo.cargas_horarias = docente.cargas_horarias;
-
-
     docente.cargas_horarias = [];
     this.distributivo.cargas_horarias.forEach(ch => {
       ch.docente = docente;
@@ -301,7 +312,6 @@ export class CargaHorariaComponent implements OnInit {
         }
       });
 
-
       this.docentes.forEach(d => {
         if (d.id == this.docente.id) {
           if (cargas.length > 0) {
@@ -309,7 +319,6 @@ export class CargaHorariaComponent implements OnInit {
           }
         }
       });
-
 
       this.spinnerService.hide();
       Swal.fire(
@@ -320,13 +329,56 @@ export class CargaHorariaComponent implements OnInit {
 
     });
 
+  }
 
 
+  seleccionarArchivo(event) {
+    this.archivoSeleccionado = event.target.files[0];
+    this.progreso = 0;
+    this.archivoSeleccionado.name;
+    let fileSize = event.target.files[0].size / 1024;
+    if (this.archivoSeleccionado.type.indexOf('pdf') > 0) {
+      if (fileSize <= 10000) {
+        this.archivoSeleccionado.name;
 
+      } else {
+        Swal.fire('Error tamaño archivo: ', 'El tamaño máximo permitido es de 10 MB', 'error');
+        this.archivoSeleccionado = null;
+      }
 
-
+    } else {
+      Swal.fire('Error Tipo Archivo: ', 'Solo se aceptan documentos extension .pdf', 'error');
+      this.archivoSeleccionado = null;
+    }
 
   }
 
 
+  subirArchivo() {
+    this.spinnerService.show();
+    if (!this.archivoSeleccionado) {
+      Swal.fire('Error Upload: ', 'Debe seleccionar un archivo', 'error');
+    } else {
+      this.serviceDistributivo.subirDocumentos(this.archivoSeleccionado, this.distributivo.id, this.tipoArchivo)
+        .subscribe(event => {
+          if (event.type === HttpEventType.UploadProgress) {
+            this.progreso = Math.round((event.loaded / event.total) * 100);
+          } else if (event.type === HttpEventType.Response) {
+            let response: any = event.body;
+
+            this.distributivo = response.distributivo as Distributivo;
+    
+            this.archivoSeleccionado = null;
+      
+            $('#modalNuevoDocumento').modal('hide');
+            Swal.fire('El archivo se ha subido completamente!', response.mensaje, 'success');
+
+            this.progreso = 0;
+          }
+          this.spinnerService.hide();
+        });
+
+    }
+
+  }
 }

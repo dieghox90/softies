@@ -33,7 +33,7 @@ export class ModalCopiarEvaluacionComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.servicePeriodo.listar().subscribe(p => {
+    this.servicePeriodo.listarShort().subscribe(p => {
       this.periodos = p;
     });
   }
@@ -42,13 +42,11 @@ export class ModalCopiarEvaluacionComponent implements OnInit {
     this.evaluaciones = [];
     this.serviceEvaluacion.listar(this.periodo.id).subscribe(e => {
       this.evaluaciones = e;
+      console.log(this.evaluaciones);
     });
   }
 
   public guardarEvaluaciones(): void {
-
-
-
 
 
     let citeriosGuardados: Criterio[] = [];
@@ -70,12 +68,14 @@ export class ModalCopiarEvaluacionComponent implements OnInit {
     this.serviceEvaluacion.crearList(this.evaluaciones).subscribe(e => {
       // alert('Evaluaciones guardadas ' + e.length);
       evaluacionesGuardadas = e;
+      console.log("Evaluaciones Guardadas ");
+      console.log(evaluacionesGuardadas);
 
 
       // ----- Guardamos los criterios y subcriterios ------
       this.criterioService.listar(this.periodo.id).subscribe(cri => {
         this.criterios = cri;
-
+        console.log(this.criterios);
 
         this.criterios.forEach(c => {
           c.id = null;
@@ -92,6 +92,8 @@ export class ModalCopiarEvaluacionComponent implements OnInit {
         this.criterioService.crearLita(this.criterios).subscribe(crit => {
           //alert('cRITERIOS GUARDADOS guardadas ');
           citeriosGuardados = crit;
+        //  console.log("CRITERIOS GUARDADOS");
+         // console.log(citeriosGuardados);
 
 
 
@@ -104,10 +106,13 @@ export class ModalCopiarEvaluacionComponent implements OnInit {
               c.subcriterios.forEach(s => {
                 this.preguntaService.listarSubcriterio(s.id).forEach(p => {
                   this.preguntas = p;
+                  console.log("PREGUNTAAASSS");
+                  console.log(this.preguntas);
 
                   this.preguntas.forEach(pre => {
                     pre.id = null;
                     pre.resultados = [];
+                    pre.respuestas = []; ///ESTO AUMENTE AHORITAS
                     citeriosGuardados.forEach(cri => {
                       cri.subcriterios.forEach(sub => {
                         if (pre.subcriterio.nombre == sub.nombre) {
@@ -135,8 +140,8 @@ export class ModalCopiarEvaluacionComponent implements OnInit {
                   });
 
 
-                  console.log("Preguntas");
-                  console.log(this.preguntas);
+                  //console.log("Preguntas");
+                  //console.log(this.preguntas);
 
                   this.preguntaService.crearLista(this.preguntas).subscribe(pre => {
                     alert('Preguntas Guardadas guardadas ');

@@ -21,6 +21,13 @@
             </div>
 
             <div class="form-group">
+             <select  class="form-control" [(ngModel)]="periodo.estado" name="estado">
+                   <option [ngValue]="true">Verdadero</option>
+                   <option [ngValue]="false">Falso</option>
+             </select>
+            </div>
+
+            <div class="form-group">
                 <label class="font-weight-bold" for="fecha_inicio">Fecha de Inicio</label>
                 <br>
                 <input style="width: 80%;display: inline;" [matDatepicker]="matFechaInicio" class="form-control"

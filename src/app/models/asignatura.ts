@@ -13,6 +13,15 @@ export class Asignatura {
     //no esta mapeada, se ultilza solo para los checkBox
     estado_asig_mat: boolean;
 
+
+
+    // Esto no esta mapeado sirve unicamente para el repositorio
+    guia: string;
+    ruta_guia: string;
+    silabo: string;
+    ruta_silabo: string;
+    
+
     public Asignatura() {
         this.estado_asig_mat = false;
     }

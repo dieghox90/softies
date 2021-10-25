@@ -38,7 +38,7 @@ export class PlanificacionComponent implements OnInit {
 
 
   @ViewChild('inputGuia')
-  inputGuiA: ElementRef;
+  inputGuia: ElementRef;
 
   @ViewChild('inputSilabo')
   inputSilabo: ElementRef;
@@ -103,7 +103,7 @@ export class PlanificacionComponent implements OnInit {
     this.progreso = 0;
     this.archivoSeleccionadoSilabo.name;
     let fileSize = event.target.files[0].size / 1024;
-    if (this.archivoSeleccionadoSilabo.type.indexOf('pdf') > 0) {
+    
       if (fileSize < 10000) {
         this.archivoSeleccionadoSilabo.name;
 
@@ -111,11 +111,6 @@ export class PlanificacionComponent implements OnInit {
         Swal.fire('Error tamaño archivo: ', 'El tamaño máximo permitido es de 10 MB', 'error');
         this.archivoSeleccionadoSilabo = null;
       }
-
-    } else {
-      Swal.fire('Error Tipo Archivo: ', 'Solo se aceptan documentos extension .pdf', 'error');
-      this.archivoSeleccionadoSilabo = null;
-    }
 
   }
 
@@ -144,6 +139,7 @@ export class PlanificacionComponent implements OnInit {
             this.archivoSeleccionadoGuia = null;
             this.archivoSeleccionadoSilabo = null;
             this.archivoSeleccionado = null
+            this.inputGuia.nativeElement.value = "";
           }
         });
 
@@ -177,6 +173,7 @@ export class PlanificacionComponent implements OnInit {
             this.archivoSeleccionadoGuia = null;
             this.archivoSeleccionadoSilabo = null;
             this.archivoSeleccionado = null
+            this.inputSilabo.nativeElement.value = "";
           }
         });
 

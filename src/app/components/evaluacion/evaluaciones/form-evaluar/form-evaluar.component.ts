@@ -37,9 +37,11 @@ export class FormEvaluarComponent implements OnInit {
   estadoEdicion: boolean;
   fechaActual: Date;
   habilitado: boolean;
+  cargando: boolean;
 
 
   constructor(private localService: LocalService, public authService: AuthService, private spinnerService: NgxSpinnerService, private serviceRespuesta: RespuestaService, private servicePregunta: PreguntaService, private service: EvaluacionService, private router: Router, private serviceDatosEvaluacion: DatosEvaluacionService) {
+    this.cargando = true;
     this.evaluacion = new Evaluacion();
     this.evaluacion.clasificacion = new Clasificacion();
     this.criterio = new Criterio();
@@ -59,7 +61,7 @@ export class FormEvaluarComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.spinnerService.show();
+
 
 
 
@@ -71,6 +73,8 @@ export class FormEvaluarComponent implements OnInit {
       let c = []; //criterios
       let s = []; //subcriterios
       this.evaluacion.preguntas.forEach(p => {
+        //  p.respuestas = [];/// ESTO PUSE EL 9 NOVIMEBRE 2020
+
         c.push(p.subcriterio.criterio.id);
         s.push(p.subcriterio.id);
       });
@@ -86,6 +90,9 @@ export class FormEvaluarComponent implements OnInit {
         s.criterio = new Criterio();
         s.id = id;
         this.evaluacion.preguntas.forEach(p => {
+
+          // p.respuestas = []; /// ESTO PUSE EL 9 NOVIMEBRE 2020
+
           if (id == p.subcriterio.id) {
             s.preguntas.push(p);
             s.criterio.id = p.subcriterio.criterio.id;
@@ -103,16 +110,58 @@ export class FormEvaluarComponent implements OnInit {
         this.subcriterios.forEach(s => {
           if (id == s.criterio.id) {
             crit.id = s.criterio.id;
-            crit.nombre = s.nombre;
+            crit.nombre = s.criterio.nombre;
+            // crit.nombre = s.nombre;
             crit.subcriterios.push(s);
           }
         });
         this.criterios.push(crit);
       });
 
+
+
+      //---------- FILTRANDO COEVALUACION DIRECTIVOS A DOCENTES - POR COORDINACION ------
+
+      if (this.authService.hasRole('ROLE_COORD_INVESTIGACION') && this.evaluacion.clasificacion.nombre == "Coevaluación - Directivos a Docentes") {
+        this.criterios = this.criterios.filter(c => c.nombre == "Investigación");
+      }
+
+      if (this.authService.hasRole('ROLE_COORD_VINCULACION') && this.evaluacion.clasificacion.nombre == "Coevaluación - Directivos a Docentes") {
+        this.criterios = this.criterios.filter(c => c.nombre == "Vinculación con la Sociedad");
+      }
+
+      if (this.authService.hasRole('ROLE_COORD_CARRERA') && this.evaluacion.clasificacion.nombre == "Coevaluación - Directivos a Docentes") {
+        this.criterios = this.criterios.filter(c => c.nombre == "Docencia");
+      }
+
+
+      if (this.authService.hasRole('ROLE_RECTOR') && this.evaluacion.clasificacion.nombre == "Coevaluación - Directivos a Docentes") {
+
+        if (this.evaluacion.nombre_evaluado == 'Diego Vicente Guamán Jima') {
+          this.criterios = this.criterios.filter(c => c.nombre == "Gestión Académica" || c.nombre == "Investigación");
+        } else if (this.evaluacion.nombre_evaluado == 'Juan Carlos Guarinda Castillo') {
+          this.criterios = this.criterios.filter(c => c.nombre == "Gestión Académica" || c.nombre == "Vinculación con la Sociedad");
+        } else if (this.evaluacion.nombre_evaluado == 'Nelly Elizabeth Cueva Reategui') {
+          this.criterios = this.criterios.filter(c => c.nombre == "Gestión Académica" || c.nombre == "Docencia");
+        } else if (this.evaluacion.nombre_evaluado == 'DIANA ELSA PAUCAR ORDOÑEZ') {
+          this.criterios = this.criterios.filter(c => c.nombre == "Gestión Académica" || c.nombre == "Docencia");
+        } else {
+          this.criterios = this.criterios.filter(c => c.nombre == "Gestión Académica");
+        }
+
+      }
+
+
+
+      //------- FIN FILTRO ---------------
+
+
       // --------------- Cargar respuestas --------------------- ///
 
-      this.serviceRespuesta.listarByEvaluacion(this.evaluacion.id).subscribe(res => {
+      this.serviceRespuesta.listarByEvaluacion(this.evaluacion.id,this.evaluacion.id_evaluador,this.evaluacion.id_evaluado).subscribe(res => {
+
+        console.log("EVALUADOR "+this.evaluacion.id_evaluador +" --- "+" EEVALUADO "+this.evaluacion.id_evaluado);
+        
 
         this.respuestas = res;
         this.respuestas.forEach(res => {
@@ -131,6 +180,8 @@ export class FormEvaluarComponent implements OnInit {
                     }
                   });
                 }
+
+            
               });
             });
           });
@@ -138,15 +189,16 @@ export class FormEvaluarComponent implements OnInit {
 
         });
 
-        this.spinnerService.hide();
-
       });
+
+
+      this.cargando = false;
 
 
 
 
     }, err => {
-      this.spinnerService.hide();
+      this.cargando = false;
     });
 
 
@@ -195,6 +247,8 @@ export class FormEvaluarComponent implements OnInit {
       this.respuestas.push(resp);
 
     }
+
+    console.log(resp);
   }
 
 
@@ -215,14 +269,6 @@ export class FormEvaluarComponent implements OnInit {
       this.spinnerService.hide();
 
     } else {
-
-      console.log("respuestas");
-      console.log(this.respuestas);
-
-
-
-
-
       this.serviceRespuesta.crear_listado(this.respuestas).subscribe(
         respuestas => {
           this.spinnerService.show();

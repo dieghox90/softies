@@ -10,6 +10,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { ConfiguracionPlanesService } from 'src/app/services/configuracion-planes.service';
 import { LocalService } from 'src/app/services/local.service';
 import { PlanificacionAcademica } from 'src/app/models/planificacion-academica';
+import { GlobalVariable } from 'src/app/Globals/variables';
 
 @Component({
   selector: 'app-planes-semanales',
@@ -25,6 +26,8 @@ export class PlanesSemanalesComponent implements OnInit {
   planSemanal: PlanSemanal;
   idP: number;
 
+  rutaArchivo: string="";
+
   constructor(private spinnerService: NgxSpinnerService, private service: PlanSemanalService,
     private serviceCargaHoraria: CargaHorariaService,
     private activatedRoute: ActivatedRoute,
@@ -33,6 +36,7 @@ export class PlanesSemanalesComponent implements OnInit {
     private servicePlanSemanal: PlanSemanalService) {
     this.idP = this.localService.getJsonValue('idP');
     this.planSemanal = new PlanSemanal();
+    this.rutaArchivo=GlobalVariable.URL_DOCS_PLANIFICACION;
 
   }
 

@@ -19,6 +19,7 @@ export class Evaluacion {
     fecha_fin: string;
 
 
+    // Esto no esta mapeado
     id_evaluado: number;
     id_evaluador: number;
     asignatura: string;

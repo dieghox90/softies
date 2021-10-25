@@ -16,11 +16,13 @@ export class FormPeriodoComponent implements OnInit {
   periodo: Periodo;
   fechaInicio: Date;
   fechaFin: Date;
+  estado: boolean;
 
   constructor(private datepipe: DatePipe, private spinnerService: NgxSpinnerService, private service: PeriodoService, private router: Router, private activatedRoute: ActivatedRoute) {
     this.periodo = new Periodo();
     this.fechaInicio = new Date();
     this.fechaFin = new Date();
+    this.estado = false;
   }
 
   ngOnInit() {
@@ -29,6 +31,7 @@ export class FormPeriodoComponent implements OnInit {
       if (id) {
         this.service.ver(id).subscribe(per => {
           this.periodo = per;
+          //this.estado = this.periodo.estado;
           this.fechaInicio = new Date(this.periodo.fecha_inicio);
           this.fechaFin = new Date(this.periodo.fecha_fin);
         });
@@ -60,6 +63,7 @@ export class FormPeriodoComponent implements OnInit {
     this.spinnerService.show();
     this.periodo.fecha_inicio = this.datepipe.transform(this.fechaInicio, 'yyyy-MM-dd HH:mm:ss');
     this.periodo.fecha_fin = this.datepipe.transform(this.fechaFin, 'yyyy-MM-dd HH:mm:ss');
+    console.log(this.estado);
     this.service.editar(this.periodo).subscribe(per => {
       Swal.fire(
         "Edicion",
@@ -67,7 +71,12 @@ export class FormPeriodoComponent implements OnInit {
         "success"
       );
       this.router.navigate(["/periodos"]);
+      this.spinnerService.hide();
     });
-    this.spinnerService.hide();
+    
+  }
+
+  eventChange($event) { 
+    console.log($event);
   }
 }

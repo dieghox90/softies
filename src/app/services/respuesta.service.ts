@@ -21,8 +21,12 @@ export class RespuestaService {
     return this.http.get<Respuesta[]>(this.baseEndPoint);
   }
 
-  public listarByEvaluacion(id: number): Observable<Respuesta[]> {
-    return this.http.get<Respuesta[]>(this.baseEndPoint + "-lista/" + id);
+  public listarByEvaluacion(id_evaluacion: number, id_evaluador: number, id_evaluado: number): Observable<Respuesta[]> {
+    let params = new HttpParams()
+      .set('id_evaluacion', id_evaluacion + "")
+      .set('id_evaluador', id_evaluador + "")
+      .set('id_evaluado', id_evaluado + "")
+    return this.http.get<Respuesta[]>(this.baseEndPoint + "-lista/", { params: params });
   }
 
   public crear(respuesta: Respuesta): Observable<Respuesta> {

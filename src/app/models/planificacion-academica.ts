@@ -9,6 +9,7 @@ export class PlanificacionAcademica {
     ruta_silabo: string;
     periodo_id: number;
     asignatura_id: number;
+    ciclo_id: number;
     nombre_asignatura: string;
     nombre_paralelo: string;
     create_at: string;

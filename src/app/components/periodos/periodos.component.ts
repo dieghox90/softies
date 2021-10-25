@@ -13,7 +13,9 @@ export class PeriodosComponent implements OnInit {
 
   titulo: string = "PERIODOS LECTIVOS";
   periodos: Periodo[];
-  constructor(private spinnerService: NgxSpinnerService, private service: PeriodoService, private matriculaService: MatriculaService) { }
+  constructor(private spinnerService: NgxSpinnerService, private service: PeriodoService, private matriculaService: MatriculaService) { 
+
+  }
 
   ngOnInit() {
     this.spinnerService.show();

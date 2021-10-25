@@ -1,31 +1,39 @@
-<div style="margin-top: 80px;" *ngIf="evaluacion==null">
-    <div class="alerta alert-d">
-        <h2 class="text-center">Acceso denegado </h2>
-        <span class="badge badge-danger"> Aviso:</span>
-        <br>
-        <p>Al parecer no tienes permiso para acceder a este recurso {{authService.usuario.nombre}}, si crees que se
-            trata de
-            un error, por favor ponte en contacto con el Administrador del Sistema o deja un mensaje en nuestra
-            página del Facebook
-        </p>
-    </div>
-
+<div style="margin-top: 80px;" *ngIf="cargando" class="alert alert-secondary p-3 text-center" role="alert">
+    <h2 class="text-center">Cargando!!</h2>
+    <i class="fas fa-spinner fa-spin fa-3x"></i>
+    <p class="mb-0">Por favor espere</p>
 </div>
 
-<div *ngIf="evaluacion!=null">
-    <h3 class="text-center text-secondary py-3">{{evaluacion?.clasificacion?.nombre}}</h3>
 
-    <h5 class="badge badge-secondary" style="font-size: 15px;">Periodo</h5>
-    <div class="alerta alert-p">
-        <p>{{nombrePeriodo}}</p>
+<div *ngIf="!cargando">
+    <div style="margin-top: 80px;" *ngIf="evaluacion==null">
+        <div class="alerta alert-d">
+            <h2 class="text-center">Acceso denegado </h2>
+            <span class="badge badge-danger"> Aviso:</span>
+            <br>
+            <p>Al parecer no tienes permiso para acceder a este recurso {{authService.usuario.nombre}}, si crees que se
+                trata de
+                un error, por favor ponte en contacto con el Administrador del Sistema o deja un mensaje en nuestra
+                página del Facebook
+            </p>
+        </div>
+
     </div>
 
-    <h5 class="badge badge-secondary" style="font-size: 15px;">Descripción</h5>
-    <div class="alerta alert-p">
-        <p>{{evaluacion?.descripcion}}</p>
-    </div>
+    <div *ngIf="evaluacion!=null">
+        <h3 class="text-center text-secondary py-3">{{evaluacion?.clasificacion?.nombre}}</h3>
 
-    <!--
+        <h5 class="badge badge-secondary" style="font-size: 15px;">Periodo</h5>
+        <div class="alerta alert-p">
+            <p>{{nombrePeriodo}}</p>
+        </div>
+
+        <h5 class="badge badge-secondary" style="font-size: 15px;">Descripción</h5>
+        <div class="alerta alert-p">
+            <p>{{evaluacion?.descripcion}}</p>
+        </div>
+
+        <!--
     <h5 class="badge badge-secondary" style="font-size: 15px;">Evidencia de Evaluacion</h5>
     <div class="alerta alert-w">
         Una vez que complete la evaluación de este periodo académico, se le habilitará la opción
@@ -34,72 +42,467 @@
     </div>
 -->
 
-    <div *ngIf="evaluaciones.length==0" class="alerta alert-w">
-        <strong>Aviso</strong>
-        <br>
-        No cuenta con evaluaciones configuradas para la {{evaluacion?.clasificacion?.nombre}}, esto puede ocurrir porque
-        usted no participa en este tipo de Evaluación o que el encargado de la configuración se le pasó por alto,
-        por favor comuníquese con el Administrador del sistema para mayor información
-    </div>
+        <div *ngIf="evaluaciones.length==0" class="alerta alert-w">
+            <strong>Aviso</strong>
+            <br>
+            No cuenta con evaluaciones configuradas para la {{evaluacion?.clasificacion?.nombre}}, esto puede ocurrir
+            porque
+            usted no participa en este tipo de Evaluación o que el encargado de la configuración se le pasó por alto,
+            por favor comuníquese con el Administrador del sistema para mayor información
+        </div>
 
-    <div *ngIf="evaluacion.preguntas.length==0" class="alerta alert-w">
-        <strong>Aviso</strong>
-        <br>
-        La evaluación no cuenta con un banco de peguntas asociado, por favor póngase en contacto con el Administrador
-        del sistema.
+        <div *ngIf="evaluacion.preguntas.length==0" class="alerta alert-w">
+            <strong>Aviso</strong>
+            <br>
+            La evaluación no cuenta con un banco de peguntas asociado, por favor póngase en contacto con el
+            Administrador
+            del sistema.
 
-    </div>
+        </div>
 
-    <table id="contenido" *ngIf="evaluaciones.length>0 && evaluacion?.preguntas.length>0" class="table table-striped">
+        <table id="contenido" *ngIf="evaluaciones.length>0 && evaluacion?.preguntas.length>0"
+            class="table table-striped">
 
-        <thead class="text-center">
-            <tr>
-                <th>
-                    Docente
-                </th>
-                <th *ngIf="authService.hasRole('ROLE_ESTUDIANTE')">Asignatura</th>
-                <th>Finalización</th>
-                <th>Preguntas</th>
-                <th>Avance</th>
-                <th>Acción</th>
-            </tr>
-        </thead>
+            <thead class="text-center">
+                <tr>
+                    <th>
+                        Docente
+                    </th>
+                    <th *ngIf="authService.hasRole('ROLE_ESTUDIANTE')">Asignatura</th>
+                    <th>Finalización</th>
+                    <th>Preguntas</th>
+                    <th>Avance</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
 
-        <tbody class="text-center">
-            <tr *ngFor="let evaluacion of evaluaciones">
-                <td>{{evaluacion.nombre_evaluado}}</td>
-                <td *ngIf="authService.hasRole('ROLE_ESTUDIANTE')">{{evaluacion.asignatura}}</td>
-                <td>{{evaluacion.fecha_fin | date:"dd/MM/yyyy - HH:mm"}}</td>
-                <td>{{evaluacion.numero_preguntas}}</td>
-                <td> <span *ngIf="evaluacion.avance==0" class="badge badge-danger">
-                        {{evaluacion.avance}}/{{evaluacion.numero_preguntas}}
-                    </span>
-                    <span *ngIf="evaluacion.avance==evaluacion.numero_preguntas" class="badge badge-success">
-                        {{evaluacion.avance}}/{{evaluacion.numero_preguntas}}
-                    </span>
+            <tbody class="text-center">
+                <tr *ngFor="let evaluacion of evaluaciones">
+                    <td>{{evaluacion.nombre_evaluado}}</td>
+                    <td *ngIf="authService.hasRole('ROLE_ESTUDIANTE')">{{evaluacion.asignatura}}</td>
+                    <td>{{evaluacion.fecha_fin | date:"dd/MM/yyyy - HH:mm"}}</td>
+                    <td>
 
-                    <span *ngIf="evaluacion.avance != 0 && evaluacion.avance != evaluacion.numero_preguntas"
-                        class="badge badge-warning">
-                        {{evaluacion.avance}}/{{evaluacion.numero_preguntas}}
-                    </span>
-                </td>
-
-                <td>
-                    <div *ngIf="evaluacion.numero_preguntas > evaluacion.avance">
-                        <button *ngIf="habilitado" (click)="evaluar(evaluacion)"
-                            class="btn btn-info btn-sm">Evaluar</button>
-                        <div *ngIf="habilitado==false" class="text-danger">
-                            Expirado
+                        <div
+                            *ngIf="evaluacion.clasificacion.nombre=='Coevaluación - Directivos a Docentes' && authService.hasRole('ROLE_COORD_CARRERA')">
+                            {{num_preguntasDocencia}}
                         </div>
-                    </div>
 
-                    <div *ngIf="evaluacion.numero_preguntas == evaluacion.avance" class="text-success">
-                        Completado
-                    </div>
-                </td>
-            </tr>
 
-        </tbody>
 
-    </table>
+                        <div
+                            *ngIf="evaluacion.clasificacion.nombre=='Coevaluación - Directivos a Docentes' && authService.hasRole('ROLE_COORD_INVESTIGACION')">
+
+                            {{num_preguntasInvestigacion}}
+
+                        </div>
+
+                        <div
+                            *ngIf="evaluacion.clasificacion.nombre=='Coevaluación - Directivos a Docentes' && authService.hasRole('ROLE_COORD_VINCULACION')">
+                            {{num_preguntasVinculacion}}
+                        </div>
+
+
+                        <div
+                            *ngIf="evaluacion.clasificacion.nombre=='Coevaluación - Directivos a Docentes' && authService.hasRole('ROLE_RECTOR')">
+
+                            <!-- PARA INVESIGACION -->
+                            <div *ngIf="evaluacion.nombre_evaluado=='Diego Vicente Guamán Jima'">
+                                {{num_preguntasGestionInstitucional+num_preguntasInvestigacion}}
+                            </div>
+
+                            <!-- PARA VINCULACION -->
+                            <div *ngIf="evaluacion.nombre_evaluado=='Juan Carlos Guarinda Castillo'">
+                                {{num_preguntasGestionInstitucional+num_preguntasVinculacion}}
+                            </div>
+
+                            <!-- PARA DOCENCIA -->
+                            <div *ngIf="evaluacion.nombre_evaluado=='Nelly Elizabeth Cueva Reategui'">
+                                {{num_preguntasGestionInstitucional+num_preguntasDocencia}}
+                            </div>
+
+                            <!-- PARA DOCENCIA -->
+                            <div *ngIf="evaluacion.nombre_evaluado=='DIANA ELSA PAUCAR ORDOÑEZ'">
+                                {{num_preguntasGestionInstitucional+num_preguntasDocencia}}
+                            </div>
+
+
+                            <!-- RESTO DOCENTES-->
+                            <div *ngIf="evaluacion.nombre_evaluado!='Diego Vicente Guamán Jima' &&
+                        evaluacion.nombre_evaluado!='Juan Carlos Guarinda Castillo' &&
+                        evaluacion.nombre_evaluado!='Nelly Elizabeth Cueva Reategui'&&
+                        evaluacion.nombre_evaluado!='DIANA ELSA PAUCAR ORDOÑEZ'">
+                                {{num_preguntasGestionInstitucional}}
+                            </div>
+
+                        </div>
+
+                        <div *ngIf="evaluacion.clasificacion.nombre=='Heteroevaluación' || 
+                    evaluacion.clasificacion.nombre=='Coevaluación - Pares Académicos' 
+                    || evaluacion.clasificacion.nombre=='Autoevaluación'">
+                            {{evaluacion.numero_preguntas}}
+                        </div>
+
+
+                    </td>
+
+                    <td>
+
+
+                        <div
+                            *ngIf="evaluacion.clasificacion.nombre=='Coevaluación - Directivos a Docentes' && authService.hasRole('ROLE_COORD_CARRERA')">
+                            <span *ngIf="evaluacion.avance==0" class="badge badge-danger">
+                                {{evaluacion.avance}}/{{num_preguntasDocencia}}
+                            </span>
+
+                            <span *ngIf="evaluacion.avance==num_preguntasDocencia" class="badge badge-success">
+                                {{evaluacion.avance}}/{{num_preguntasDocencia}}
+                            </span>
+
+
+                            <span *ngIf="evaluacion.avance != 0 && evaluacion.avance != num_preguntasDocencia"
+                                class="badge badge-warning">
+                                {{evaluacion.avance}}/{{num_preguntasDocencia}}
+                            </span>
+
+                        </div>
+
+
+
+                        <div
+                            *ngIf="evaluacion.clasificacion.nombre=='Coevaluación - Directivos a Docentes' && authService.hasRole('ROLE_COORD_INVESTIGACION')">
+                            <span *ngIf="evaluacion.avance==0" class="badge badge-danger">
+                                {{evaluacion.avance}}/{{num_preguntasInvestigacion}}
+                            </span>
+
+                            <span *ngIf="evaluacion.avance==num_preguntasInvestigacion" class="badge badge-success">
+                                {{evaluacion.avance}}/{{num_preguntasInvestigacion}}
+                            </span>
+
+                            <span *ngIf="evaluacion.avance != 0 && evaluacion.avance != num_preguntasInvestigacion"
+                                class="badge badge-warning">
+                                {{evaluacion.avance}}/{{num_preguntasInvestigacion}}
+                            </span>
+                        </div>
+
+                        <div
+                            *ngIf="evaluacion.clasificacion.nombre=='Coevaluación - Directivos a Docentes' && authService.hasRole('ROLE_COORD_VINCULACION')">
+                            <span *ngIf="evaluacion.avance==0" class="badge badge-danger">
+                                {{evaluacion.avance}}/{{num_preguntasVinculacion}}
+                            </span>
+
+                            <span *ngIf="evaluacion.avance==num_preguntasVinculacion" class="badge badge-success">
+                                {{evaluacion.avance}}/{{num_preguntasVinculacion}}
+                            </span>
+
+                            <span *ngIf="evaluacion.avance != 0 && evaluacion.avance != num_preguntasVinculacion"
+                                class="badge badge-warning">
+                                {{evaluacion.avance}}/{{num_preguntasVinculacion}}
+                            </span>
+                        </div>
+
+
+                        <div
+                            *ngIf="evaluacion.clasificacion.nombre=='Coevaluación - Directivos a Docentes' && authService.hasRole('ROLE_RECTOR')">
+
+
+
+                            <!-- PARA INVESIGACION -->
+                            <div *ngIf="evaluacion.nombre_evaluado=='Diego Vicente Guamán Jima'">
+
+
+                                <span *ngIf="evaluacion.avance==0" class="badge badge-danger">
+                                    {{evaluacion.avance}}/
+                                    {{num_preguntasGestionInstitucional+num_preguntasInvestigacion}}
+                                </span>
+                                <span *ngIf="evaluacion.avance==num_preguntasGestionInstitucional"
+                                    class="badge badge-success">
+                                    {{evaluacion.avance}}/
+                                    {{num_preguntasGestionInstitucional+num_preguntasInvestigacion}}
+                                </span>
+                                <span
+                                    *ngIf="evaluacion.avance != 0 && evaluacion.avance != num_preguntasGestionInstitucional"
+                                    class="badge badge-warning">
+                                    {{evaluacion.avance}}/
+                                    {{num_preguntasGestionInstitucional+num_preguntasInvestigacion}}
+                                </span>
+                            </div>
+
+                            <!-- PARA VINCULACION -->
+                            <div *ngIf="evaluacion.nombre_evaluado=='Juan Carlos Guarinda Castillo'">
+                                <span *ngIf="evaluacion.avance==0" class="badge badge-danger">
+                                    {{evaluacion.avance}}/
+                                    {{num_preguntasGestionInstitucional+num_preguntasVinculacion}}
+                                </span>
+                                <span *ngIf="evaluacion.avance==num_preguntasGestionInstitucional"
+                                    class="badge badge-success">
+                                    {{evaluacion.avance}}/
+                                    {{num_preguntasGestionInstitucional+num_preguntasVinculacion}}
+                                </span>
+                                <span
+                                    *ngIf="evaluacion.avance != 0 && evaluacion.avance != num_preguntasGestionInstitucional"
+                                    class="badge badge-warning">
+                                    {{evaluacion.avance}}/
+                                    {{num_preguntasGestionInstitucional+num_preguntasVinculacion}}
+                                </span>
+
+                            </div>
+
+                            <!-- PARA DOCENCIA -->
+                            <div *ngIf="evaluacion.nombre_evaluado=='Nelly Elizabeth Cueva Reategui'">
+                                <span *ngIf="evaluacion.avance==0" class="badge badge-danger">
+                                    {{evaluacion.avance}}/
+                                    {{num_preguntasGestionInstitucional+num_preguntasDocencia}}
+                                </span>
+                                <span *ngIf="evaluacion.avance==num_preguntasGestionInstitucional"
+                                    class="badge badge-success">
+                                    {{evaluacion.avance}}/
+                                    {{num_preguntasGestionInstitucional+num_preguntasDocencia}}
+                                </span>
+                                <span
+                                    *ngIf="evaluacion.avance != 0 && evaluacion.avance != num_preguntasGestionInstitucional"
+                                    class="badge badge-warning">
+                                    {{evaluacion.avance}}/
+                                    {{num_preguntasGestionInstitucional+num_preguntasDocencia}}
+                                </span>
+
+                            </div>
+
+                            <!-- PARA DOCENCIA -->
+                            <div *ngIf="evaluacion.nombre_evaluado=='DIANA ELSA PAUCAR ORDOÑEZ'">
+                                <span *ngIf="evaluacion.avance==0" class="badge badge-danger">
+                                    {{evaluacion.avance}}/
+                                    {{num_preguntasGestionInstitucional+num_preguntasDocencia}}
+                                </span>
+                                <span *ngIf="evaluacion.avance==num_preguntasGestionInstitucional"
+                                    class="badge badge-success">
+                                    {{evaluacion.avance}}/
+                                    {{num_preguntasGestionInstitucional+num_preguntasDocencia}}
+                                </span>
+                                <span
+                                    *ngIf="evaluacion.avance != 0 && evaluacion.avance != num_preguntasGestionInstitucional"
+                                    class="badge badge-warning">
+                                    {{evaluacion.avance}}/
+                                    {{num_preguntasGestionInstitucional+num_preguntasDocencia}}
+                                </span>
+
+                            </div>
+
+
+
+                            <!-- RESTO DE DOCENTES -->
+                            <div *ngIf="evaluacion.nombre_evaluado!='Diego Vicente Guamán Jima' &&
+                        evaluacion.nombre_evaluado!='Juan Carlos Guarinda Castillo' &&
+                        evaluacion.nombre_evaluado!='Nelly Elizabeth Cueva Reategui'&&
+                        evaluacion.nombre_evaluado!='DIANA ELSA PAUCAR ORDOÑEZ'">
+
+                                <span *ngIf="evaluacion.avance==0" class="badge badge-danger">
+                                    {{evaluacion.avance}}/{{num_preguntasGestionInstitucional}}
+                                </span>
+                                <span *ngIf="evaluacion.avance==num_preguntasGestionInstitucional"
+                                    class="badge badge-success">
+                                    {{evaluacion.avance}}/{{num_preguntasGestionInstitucional}}
+                                </span>
+                                <span
+                                    *ngIf="evaluacion.avance != 0 && evaluacion.avance != num_preguntasGestionInstitucional"
+                                    class="badge badge-warning">
+                                    {{evaluacion.avance}}/{{num_preguntasGestionInstitucional}}
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <div *ngIf="evaluacion.clasificacion.nombre=='Heteroevaluación' || 
+                    evaluacion.clasificacion.nombre=='Coevaluación - Pares Académicos' 
+                    || evaluacion.clasificacion.nombre=='Autoevaluación'">
+                            <span *ngIf="evaluacion.avance==0" class="badge badge-danger">
+                                {{evaluacion.avance}}/{{evaluacion.numero_preguntas}}
+                            </span>
+
+                            <span *ngIf="evaluacion.avance==evaluacion.numero_preguntas" class="badge badge-success">
+                                {{evaluacion.avance}}/{{evaluacion.numero_preguntas}}
+                            </span>
+
+                            <span *ngIf="evaluacion.avance != 0 && evaluacion.avance != evaluacion.numero_preguntas"
+                                class="badge badge-warning">
+                                {{evaluacion.avance}}/{{evaluacion.numero_preguntas}}
+                            </span>
+                        </div>
+
+                    </td>
+
+                    <td>
+
+
+
+                        <div
+                            *ngIf="evaluacion.clasificacion.nombre=='Coevaluación - Directivos a Docentes' && authService.hasRole('ROLE_COORD_CARRERA')">
+
+                            <div *ngIf="num_preguntasDocencia == evaluacion.avance" class="text-success">
+                                Completado
+                            </div>
+
+                            <div *ngIf="num_preguntasDocencia > evaluacion.avance">
+                                <button *ngIf="habilitado" (click)="evaluar(evaluacion)"
+                                    class="btn btn-info btn-sm">Evaluar</button>
+                                <div *ngIf="habilitado==false" class="text-danger">
+                                    Expirado
+                                </div>
+                            </div>
+
+
+                        </div>
+
+
+
+                        <div
+                            *ngIf="evaluacion.clasificacion.nombre=='Coevaluación - Directivos a Docentes' && authService.hasRole('ROLE_COORD_INVESTIGACION')">
+                            <div *ngIf="num_preguntasInvestigacion== evaluacion.avance" class="text-success">
+                                Completado
+                            </div>
+
+                            <div *ngIf="num_preguntasInvestigacion > evaluacion.avance">
+                                <button *ngIf="habilitado" (click)="evaluar(evaluacion)"
+                                    class="btn btn-info btn-sm">Evaluar</button>
+                                <div *ngIf="habilitado==false" class="text-danger">
+                                    Expirado
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div
+                            *ngIf="evaluacion.clasificacion.nombre=='Coevaluación - Directivos a Docentes' && authService.hasRole('ROLE_COORD_VINCULACION')">
+                            <div *ngIf="num_preguntasVinculacion== evaluacion.avance" class="text-success">
+                                Completado
+                            </div>
+
+                            <div *ngIf="num_preguntasVinculacion > evaluacion.avance">
+                                <button *ngIf="habilitado" (click)="evaluar(evaluacion)"
+                                    class="btn btn-info btn-sm">Evaluar</button>
+                                <div *ngIf="habilitado==false" class="text-danger">
+                                    Expirado
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div
+                            *ngIf="evaluacion.clasificacion.nombre=='Coevaluación - Directivos a Docentes' && authService.hasRole('ROLE_RECTOR')">
+
+
+                            <!-- PARA INVESTIGACION -->
+                            <div *ngIf="evaluacion.nombre_evaluado=='Diego Vicente Guamán Jima'">
+                                <div *ngIf="num_preguntasGestionInstitucional+num_preguntasInvestigacion== evaluacion.avance"
+                                    class="text-success">
+                                    Completado
+                                </div>
+                                <div
+                                    *ngIf="num_preguntasGestionInstitucional+num_preguntasInvestigacion > evaluacion.avance">
+                                    <button *ngIf="habilitado" (click)="evaluar(evaluacion)"
+                                        class="btn btn-info btn-sm">Evaluar</button>
+                                    <div *ngIf="habilitado==false" class="text-danger">
+                                        Expirado
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- PARA VINCULACION -->
+                            <div *ngIf="evaluacion.nombre_evaluado=='Juan Carlos Guarinda Castillo'">
+                                <div *ngIf="num_preguntasGestionInstitucional+num_preguntasVinculacion== evaluacion.avance"
+                                    class="text-success">
+                                    Completado
+                                </div>
+                                <div
+                                    *ngIf="num_preguntasGestionInstitucional+num_preguntasVinculacion > evaluacion.avance">
+                                    <button *ngIf="habilitado" (click)="evaluar(evaluacion)"
+                                        class="btn btn-info btn-sm">Evaluar</button>
+                                    <div *ngIf="habilitado==false" class="text-danger">
+                                        Expirado
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- PARA DOCENCIA -->
+                            <div *ngIf="evaluacion.nombre_evaluado=='Nelly Elizabeth Cueva Reategui'">
+                                <div *ngIf="num_preguntasGestionInstitucional+num_preguntasDocencia== evaluacion.avance"
+                                    class="text-success">
+                                    Completado
+                                </div>
+                                <div
+                                    *ngIf="num_preguntasGestionInstitucional+num_preguntasDocencia > evaluacion.avance">
+                                    <button *ngIf="habilitado" (click)="evaluar(evaluacion)"
+                                        class="btn btn-info btn-sm">Evaluar</button>
+                                    <div *ngIf="habilitado==false" class="text-danger">
+                                        Expirado
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- PARA DOCENCIA -->
+                            <div *ngIf="evaluacion.nombre_evaluado=='DIANA ELSA PAUCAR ORDOÑEZ'">
+                                <div *ngIf="num_preguntasGestionInstitucional+num_preguntasDocencia== evaluacion.avance"
+                                    class="text-success">
+                                    Completado
+                                </div>
+                                <div
+                                    *ngIf="num_preguntasGestionInstitucional+num_preguntasDocencia > evaluacion.avance">
+                                    <button *ngIf="habilitado" (click)="evaluar(evaluacion)"
+                                        class="btn btn-info btn-sm">Evaluar</button>
+                                    <div *ngIf="habilitado==false" class="text-danger">
+                                        Expirado
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <!-- RESTO DOCENTES -->
+
+                            <div *ngIf="evaluacion.nombre_evaluado!='Diego Vicente Guamán Jima' &&
+                        evaluacion.nombre_evaluado!='Juan Carlos Guarinda Castillo' &&
+                        evaluacion.nombre_evaluado!='Nelly Elizabeth Cueva Reategui'&&
+                        evaluacion.nombre_evaluado!='DIANA ELSA PAUCAR ORDOÑEZ'">
+                                <div *ngIf="num_preguntasGestionInstitucional== evaluacion.avance" class="text-success">
+                                    Completado
+                                </div>
+                                <div *ngIf="num_preguntasGestionInstitucional > evaluacion.avance">
+                                    <button *ngIf="habilitado" (click)="evaluar(evaluacion)"
+                                        class="btn btn-info btn-sm">Evaluar</button>
+                                    <div *ngIf="habilitado==false" class="text-danger">
+                                        Expirado
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <div *ngIf="evaluacion.clasificacion.nombre=='Heteroevaluación' || 
+                    evaluacion.clasificacion.nombre=='Coevaluación - Pares Académicos' 
+                    || evaluacion.clasificacion.nombre=='Autoevaluación'">
+                            <div *ngIf="evaluacion.numero_preguntas == evaluacion.avance" class="text-success">
+                                Completado
+                            </div>
+
+                            <div *ngIf="evaluacion.numero_preguntas > evaluacion.avance">
+                                <button *ngIf="habilitado" (click)="evaluar(evaluacion)"
+                                    class="btn btn-info btn-sm">Evaluar</button>
+                                <div *ngIf="habilitado==false" class="text-danger">
+                                    Expirado
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </td>
+                </tr>
+
+            </tbody>
+
+        </table>
+    </div>
 </div>

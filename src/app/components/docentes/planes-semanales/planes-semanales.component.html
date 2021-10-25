@@ -80,7 +80,7 @@
 
                             <div *ngIf="plan?.plan!=null" class="alerta alert-su">
                                 <a style="text-decoration: underline"
-                                    href="http://localhost:8080/api/upload/{{plan?.ruta+'/'+plan?.plan}}">
+                                    href="{{rutaArchivo+'/'+plan?.ruta+'/'+plan?.plan}}">
                                     {{plan?.plan}}</a>
 
                             </div>

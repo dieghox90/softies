@@ -4,6 +4,58 @@
 <div>{{periodo.periodo_academico}}</div>
 <br>
 
+
+
+<div class="accordion" id="accordionExample">
+    <div class="card">
+        <div class="card-header" id="headingOne">
+            <h2 class="mb-0">
+                <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse"
+                    data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    Documentos: Horario de Clases - Distributivos <i class="fas fa-chevron-circle-down"></i>
+                </button>
+            </h2>
+        </div>
+
+        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+            <div class="card-body">
+
+                <button data-toggle="modal" data-target="#modalNuevoDocumento" class="btn btn-info btn-sm mb-3"> <i
+                        class="fas fa-plus"></i> Agregar</button>
+
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Fecha Creación</th>
+                            <th>Tipo de Documento</th>
+                            <th>Nombre</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr *ngFor="let documento of distributivo.documentos_distributivos">
+                            <td>{{documento.fecha_creacion}}</td>
+                            <td>{{documento.tipo_documento}}</td>
+                            <td>{{documento.documento}}</td>
+
+                            <td>
+                                <a  target="_blank"
+                                    href="{{rutaArchivo+documento.ruta+'/'+documento.documento}}">
+                                    <i class="fas fa-eye"></i> Ver
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 <!--
 <div class="card">
     <div class="card-header  text-white bg-secondary">Buscar Docentes</div>
@@ -92,3 +144,57 @@
 
 
 <app-modal-asignacion (cargasEnviar)="recibirCargaModal($event)"></app-modal-asignacion>
+
+
+
+<!-- MODAL PARA SUBIR LOS DOCUMENTOS -->
+
+
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="modalNuevoDocumento" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Nuevo Documento</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="custom-file">
+
+                    <label for="">Tipo Documento:</label>
+                    <select class="form-control" [(ngModel)]="tipoArchivo">
+                        <option value="distributivo">Distributivo</option>
+                        <option value="horario">Horario</option>
+                    </select>
+
+
+                    <input #inputGuia (change)="seleccionarArchivo($event)" type="file" id="inputGroupFile04">
+                    <br>
+                    <button (click)="subirArchivo()" [disabled]="!archivoSeleccionado" class="btn btn-success btn-sm"
+                        type="button" id="inputGroupFileAddon04">
+                        Subir
+                    </button>
+                </div>
+
+                <div *ngIf="progreso > 0" class="progress" style="height: 5px;">
+                    <div class="progress-bar progress-bar-striped" role="progressbar" [ngStyle]="{width:progreso+'%'}"
+                        attr.aria-valuenow="{{progreso}}" aria-valuemin="0" aria-valuemax="100">
+                        {{progreso}}%
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>

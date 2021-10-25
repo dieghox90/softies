@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpHeaders, HttpClient } from '@angular/common/http';
+import { HttpHeaders, HttpClient, HttpParams } from '@angular/common/http';
 import { PlanificacionAcademica } from '../models/planificacion-academica';
 import { Observable } from 'rxjs';
 import { GlobalVariable } from '../Globals/variables';
@@ -20,6 +20,15 @@ export class PlanificacionAcademicaService {
   public listar(): Observable<PlanificacionAcademica[]> {
     return this.http.get<PlanificacionAcademica[]>(this.baseEndPoint);
   }
+
+  public listarFiltrado(periodo:number, ciclo:number): Observable<PlanificacionAcademica[]> {
+    let params = new HttpParams()
+    .set('periodo', periodo + "")
+    .set('ciclo', ciclo + "")
+  return this.http.get<PlanificacionAcademica[]>(this.baseEndPoint + "-repositorio/", { params: params });
+    
+  }
+
 
   public crear(planificacion: PlanificacionAcademica): Observable<PlanificacionAcademica> {
     return this.http.post<PlanificacionAcademica>(this.baseEndPoint, planificacion);

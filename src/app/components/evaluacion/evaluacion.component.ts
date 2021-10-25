@@ -31,25 +31,18 @@ export class EvaluacionComponent implements OnInit {
 
   ngOnInit() {
     this.spinnerService.show();
-    this.servicePeriodo.listar().subscribe(p => {
+    this.servicePeriodo.listarShort().subscribe(p => {
       this.periodos = p;
+      console.log(this.periodos);
     });
-
-
     this.buscar(this.idP);
-
-    setTimeout(() => {
-      this.spinnerService.hide();
-    }, 800);
-
   }
 
   public buscar(id: number): void {
-    this.spinnerService.show();
     this.service.listar(id).subscribe(e => {
       this.evaluaciones = e;
+      this.spinnerService.hide();
     });
-    this.spinnerService.hide();
   }
 
 

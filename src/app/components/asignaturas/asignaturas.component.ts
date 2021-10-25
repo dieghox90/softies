@@ -6,6 +6,7 @@ import { Ciclo } from 'src/app/models/ciclo';
 import { CarreraService } from 'src/app/services/carrera.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 
+
 @Component({
   selector: 'app-asignaturas',
   templateUrl: './asignaturas.component.html',

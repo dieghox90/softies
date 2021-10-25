@@ -74,6 +74,15 @@ export class DocenteService {
   }
 
 
+
+  
+  public listarActivosNOCargaH(page: string, size: string): Observable<any> {
+    const params = new HttpParams().set("page", page).set("size", size); //es inmutable
+    return this.http.get<any>(this.baseEndPoint+"-no-cargaH/pagina", {
+      params: params
+    });
+  }
+
   public listarCargaHoraria(docente_id: number, periodo_id: number): Observable<Docente> {
     let params = new HttpParams()
       .set('docente', docente_id + "")

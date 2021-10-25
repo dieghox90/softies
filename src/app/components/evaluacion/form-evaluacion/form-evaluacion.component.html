@@ -28,6 +28,9 @@
             <div class="form-group">
                 <label class="font-weight-bold" for="fecha_fin">Fecha de Finalización</label>
                 <br>
+               
+            
+              
                 <input id="fecha" style="display:inline-block;width: 70%;" class="form-control" name="fecha_fin"
                     id="fecha_fin" [(ngModel)]="fecha" [owlDateTime]="dt5" [owlDateTimeTrigger]="dt5"
                     placeholder="Fecha">
@@ -35,13 +38,7 @@
                         class="fas fa-calendar"></i></span>
                 <owl-date-time #dt5></owl-date-time>
 
-
-                <!--
- <input style="width:80%;display: inline;" [matDatepicker]="matFechaFin" class="form-control"
-                    [(ngModel)]="evaluacion.fecha_fin" name="fecha_fin" id="fecha_fin">
-                <mat-datepicker-toggle [for]="matFechaFin"></mat-datepicker-toggle>
-                <mat-datepicker #matFechaFin></mat-datepicker>  
-                -->
+       
 
             </div>
 
