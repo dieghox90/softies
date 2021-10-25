@@ -1,0 +1,34 @@
+<h3 class="text-center text-secondary py-3">DOCENTES INACTIVOS</h3>
+
+<table class="table table-striped">
+
+    <thead class="bg-secondary text-white">
+        <tr>
+
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Cedula</th>
+            <th>Titulo</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr *ngFor="let docente of docentes">
+            <td>{{docente.nombre}}</td>
+            <td>{{docente.apellido}}</td>
+            <td>{{docente.cedula}}</td>
+            <td>{{docente.titulo}}</td>
+            <td>
+                <button [routerLink]="['/docente/form',docente.id]" class="btn-sm btn btn-primary"
+                    class="btn btn-info">Editar</button>
+
+                <button (click)="activar(docente)" class="btn btn-primary">Activar</button>
+            </td>
+        </tr>
+    </tbody>
+
+</table>
+<mat-paginator class="float-left mx-2" showFirstLastButtons (page)="paginar($event)" [pageIndex]="paginaActual"
+    [length]="totalRegistros" [pageSize]="totalPorPagina" [pageSizeOptions]="pageSizeOptions">
+</mat-paginator>

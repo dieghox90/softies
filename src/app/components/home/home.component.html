@@ -1,0 +1,27 @@
+<div style="margin-top: 80px;" class="card">
+    <div class="card-header bg-secondary">Bienvenida</div>
+    <div class="card-body">
+        Saludos, <strong>{{authService.usuario.completo}}</strong> te damos la bienvenida al sistema de gestión
+        académico
+        del Instituto Superior Tecnológico Primero de Mayo, si tienes algún problema técnico o de funcionalidad de la
+        página, déjanos un mensaje al WhatsApp <strong>0997834865</strong>.
+
+    </div>
+</div>
+
+<div style="margin-top: 40px;" class="card">
+    <div class="card-header bg-info">Información General</div>
+    <div class="card-body">
+        <!--<p> <strong>1.</strong> Evaluación a los Docentes<span *ngIf="authService.hasRole('ROLE_ESTUDIANTE')">. Los
+                estudiantes de
+                segundo
+                ciclo en adelante deben realizar la evaluación de los 2 últimos periodos, correspondientes a mayo -
+                octubre 2019 y
+                noviembre 2019 - abril 2020
+            </span>
+        </p>-->
+        <p> <strong>1.</strong> Por favor, realizar la evaluación a los docentes del periodo <strong>Mayo - Octubre
+                2019</strong> y <strong>Noviembre 2019 - Abril 2020</strong></p>
+
+    </div>
+</div>

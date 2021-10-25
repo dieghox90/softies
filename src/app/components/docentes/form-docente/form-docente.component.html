@@ -1,0 +1,130 @@
+<div class="position-relative text-center">
+    <button routerLink="/docentes" [ngClass]="docente.id ? '':'d-none'" class="float-left btn btn-warning btn-sm my-3">
+        <i class="fas fa-backward"></i>
+        Regresar</button>
+    <h3 class="text-center text-secondary py-3">{{docente.id ? 'EDITAR DOCENTE': 'NUEVO DOCENTE'}}</h3>
+</div>
+
+
+<form #clienteForm="ngForm">
+    <div class="row ">
+        <div class="col-md-6">
+            <div class="card mb-3">
+                <div class="card-header text-white bg-info">DATOS INFORMATIVOS</div>
+                <div class="card-body">
+                    <ul class="alert alert-danger" *ngIf="errores?.length > 0">
+                        <li *ngFor="let err of errores">
+                            {{ err }}
+                        </li>
+                    </ul>
+
+                    <div class="form-group">
+                        <label class="font-weight-bold" for="nombre">Nombre</label>
+                        <input [(ngModel)]="docente.nombre" class="form-control" type="text" id="nombre" name="nombre"
+                            #nombre="ngModel">
+                        <div class="alert alert-danger" *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)">
+                            <div *ngIf="nombre.errors.required">
+                                Nombre es requerido
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="apellido" class="font-weight-bold">Apellido</label>
+                        <input [(ngModel)]="docente.apellido" #apellido="ngModel" id="apellido" name="apellido"
+                            type="text" class="form-control">
+                        <div class="alert alert-danger"
+                            *ngIf="apellido.invalid && (apellido.dirty || apellido.touched)">
+                            <div *ngIf="apellido.errors.required">
+                                Apellido es requerido
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="font-weight-bold" for="cedula">Cedula</label>
+                        <input [(ngModel)]="docente.cedula" #cedula="ngModel" class="form-control" type="text"
+                            id="cedula" name="cedula">
+                        <div class="alert alert-danger" *ngIf="cedula.invalid && (cedula.dirty || cedula.touched)">
+                            <div *ngIf="cedula.errors.required">
+                                Cedula es requerido
+                            </div>
+                            <div *ngIf="cedula.errors.minlength || cedula.errors.maxlength">
+                                Cedula debe tener 10 caracteres
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="font-weight-bold" for="correo">Correo</label>
+                        <input [(ngModel)]="docente.correo" #correo="ngModel" class="form-control" type="text"
+                            id="correo" name="correo">
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="font-weight-bold" for="rol.nombre">Roles</label>
+
+                        <div class="form-group">
+                            <div class="custom-control custom-checkbox" *ngFor="let rol of roles">
+                                <input (change)="seleccionarRol($event,rol)" type="checkbox"
+                                    class="custom-control-input" id="{{rol.etiqueta}}" [checked]="rol.estado"
+                                    value="{{rol.etiqueta}}">
+                                <label class="custom-control-label" for="{{rol.etiqueta}}">{{rol.etiqueta}}</label>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div *ngIf="docente?.id">
+                        <h3 class="text-center">Usuario</h3>
+                        <div class="form-group">
+                            <label class="font-weight-bold" for="cedula">Username</label>
+                            <input [(ngModel)]="username" class="form-control" type="text" id="username"
+                                name="username">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="font-weight-bold" for="cedula">Clave</label>
+                            <input [(ngModel)]="clave" class="form-control" type="text" id="clave" name="clave">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-6">
+            <div class="card   mb-3">
+                <div class="card-header text-white bg-info">DIRECCION</div>
+                <div class="card-body">
+
+                    <div class="form-group">
+                        <label class="font-weight-bold" for="calle_principal">Calle Principal</label>
+                        <input [(ngModel)]="docente.direccion.calle_principal" class="form-control" type="text"
+                            id="calle_principal" name="calle_principal">
+                    </div>
+                    <div class="form-group">
+                        <label class="font-weight-bold" for="calle_secundaria">Calle Secundaria</label>
+                        <input [(ngModel)]="docente.direccion.calle_secundaria" class="form-control" type="text"
+                            id="calle_secundaria" name="calle_secundaria">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="font-weight-bold" for="referencia">Referencia</label>
+                        <input [(ngModel)]="docente.direccion.referencia" class="form-control" type="text"
+                            id="referencia" name="referencia">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</form>
+
+<div class="form-group">
+    <button style="width: 100%;" (click)="docente.id ? editar():crear()" class="btn btn-primary">
+        <i [ngClass]="docente.id ?'fas fa-user-edit':'fas fa-download'"></i>
+        {{docente.id ? 'Actualizar':'Guardar'}}
+    </button>
+</div>

@@ -1,0 +1,108 @@
+<div class="position-relative text-center">
+    <button routerLink="/carreras" [ngClass]="carrera.id ? '':'d-none'" class="float-left btn btn-warning btn-sm my-3">
+        <i class="fas fa-backward"></i>
+        Regresar</button>
+    <h3 class="text-center text-secondary py-3">
+        {{carrera.id ? 'EDITAR CARRERA': 'NUEVA CARRERA'}}</h3>
+</div>
+
+
+<div class="card">
+    <div class="card-header text-white bg-secondary">
+        Datos
+    </div>
+
+    <div class="card-body">
+        <form>
+            <div class="row">
+                <div class="col-sm-5">
+                    <div class="card  mb-3 ">
+                        <div class="card-header bg-info text-white"> <strong>DATOS DE CARRERA</strong> </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label class="font-weight-bold" for="nombre">Nombre</label>
+                                <input [(ngModel)]="carrera.nombre" class="form-control" type="text" id="nombre"
+                                    name="nombre">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="font-weight-bold" for="codigo">Código</label>
+                                <input [(ngModel)]="carrera.codigo" class="form-control" type="text" id="codigo"
+                                    name="codigo">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="font-weight-bold" for="num_semanas">Numero de Semanas</label>
+                                <input [(ngModel)]="carrera.num_semanas" class="form-control" type="number"
+                                    id="num_semanas" name="num_semanas">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="font-weight-bold" for="ciclos">Ciclos</label>
+                                <input disabled value="{{carrera.ciclos.length}}" class="form-control" type="text"
+                                    id="ciclos" name="ciclos">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm">
+                    <div class="card mb-3">
+                        <div class="card-header bg-info text-white"><strong> CICLOS </strong>
+                            <button data-toggle="modal" data-target=".bd-example-modal-xl"
+                                style="box-shadow: 2px 2px 2px black;" class="btn btn-sm btn-secondary">
+                                <i class="fas fa-plus"> Añadir</i>
+                            </button>
+
+                        </div>
+                        <div class="card-body">
+
+                            <div class="row justify-content-md-center">
+                                <div *ngFor="let ciclo of carrera.ciclos" class="col-sm-6 ">
+                                    <div class="card w-100">
+                                        <div class="card-header bg-secondary text-white">{{ciclo.nombre}}
+
+                                        </div>
+                                        <div class="card-body">
+                                            <div>
+                                                <strong>Codigo: </strong>{{ciclo.codigo}}
+                                            </div>
+
+                                            Paralelos:
+                                            <ul *ngFor="let paralelo of ciclo.paralelos">
+                                                <li>{{paralelo.nombre}}</li>
+                                            </ul>
+
+                                            <button (click)="irModal(ciclo)" data-toggle="modal"
+                                                data-target=".bd-example-modal-xl" matTooltip="EDITAR"
+                                                [matTooltipPosition]="position.value"
+                                                class="btn btn-primary btn-sm float-left"> <i
+                                                    class="fas fa-pencil-alt"></i>
+                                            </button>
+                                            <button matTooltip="ELIMINAR" [matTooltipPosition]="position.value"
+                                                class="btn btn-danger btn-sm float-right"> <i
+                                                    class="fas fa-trash-alt"></i>
+                                            </button>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button style="width: 100%;" (click)="carrera.id ? editar():crear()" class="btn btn-primary">
+                <i [ngClass]="carrera.id ?'fas fa-user-edit':'fas fa-download'"></i>
+                {{carrera.id ? 'Actualizar':'Guardar'}}
+            </button>
+        </form>
+    </div>
+
+</div>
+<app-modal-ciclo (cicloEnviar)="recibirCiclo($event)"></app-modal-ciclo>

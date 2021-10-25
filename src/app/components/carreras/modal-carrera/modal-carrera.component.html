@@ -1,0 +1,42 @@
+<div class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title w-100 text-center" id="staticBackdropLabel">{{carrera.nombre}} - CICLOS
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="row">
+                    <div *ngFor="let ciclo of carrera.ciclos" class="col-sm">
+                        <div class="card" style="width: 100%">
+                            <div class="card-header text-white bg-info text-center">Ciclo: {{ciclo.nombre}}</div>
+                            <div class="card-body">
+
+                                <strong>Asignaturas:</strong>
+                                {{ciclo.asignaturas.length==0 ? 's/n': ciclo.asignaturas.length}}
+
+                                <p>Parelelos</p>
+                                <ul *ngFor="let paralelo of ciclo.paralelos">
+                                    <li>{{paralelo.nombre}}</li>
+                                </ul>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal"> <i class="fas fa-door-closed"></i>
+                    Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>

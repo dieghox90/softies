@@ -1,0 +1,159 @@
+<h3 class="text-center text-secondary py-4">Solicitudes</h3>
+
+<div class="card">
+    <div class="card-header bg-info">Filtrado</div>
+
+    <div class="card-body">
+        <form>
+            <mat-form-field class="w-100">
+                <label class="font-weight-bold">Carrera:</label>
+                <div class="text-danger" *ngIf="carreraError">
+                    Seleccione la Carrera
+                </div>
+                <mat-select (selectionChange)="cambiarCarrera($event)" [(value)]="carrera">
+                    <mat-option [value]="undefined">--- Seleccione una Carrera ---</mat-option>
+                    <mat-option *ngFor="let c of carreras" [value]="c">{{c.nombre}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field class="w-100">
+                <label class="font-weight-bold">Ciclo:</label>
+                <div class="text-danger" *ngIf="cicloError">
+                    Seleccione el Ciclo
+                </div>
+                <mat-select [(value)]="ciclo">
+                    <mat-option [value]="undefined">--- Seleccione un Ciclo ---</mat-option>
+                    <mat-option *ngFor="let c of carrera.ciclos" [value]="c">{{c.nombre}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </form>
+        <button class="btn btn-info w-100" (click)="buscar()"> <i class="fas fa-search"></i> Cargar</button>
+
+    </div>
+
+</div>
+
+
+<h3 class="text-center text-secondary py-3">Solicitudes de Matrícula</h3>
+
+<div class="alerta alert-w" *ngIf="solicitudes.length==0">
+    No hay Solicitudes
+</div>
+<div *ngIf="solicitudes.length>0">
+
+    <div style="margin-bottom: 10px !important">
+        <div><strong>Solictudes: {{totalSolicitudes}}</strong></div>
+        <div class="row">
+            <div class="col-xs-2 ">
+                <div class="badge badge-secondary m-1">En Revisión: {{totalRevision}}</div>
+            </div>
+            <div class="col-xs-2">
+                <div class="badge badge-warning m-1">Corregir: {{totalCorregir}}</div>
+            </div>
+            <div class="col-xs-2">
+                <div class="badge badge-primary m-1">Corregidos: {{totalCorregidos}}</div>
+            </div>
+            <div class="col-xs-2">
+                <div class="badge badge-info m-1">Aprobados: {{totalAprobados}}</div>
+            </div>
+            <div class="col-xs-2">
+                <div class="badge badge-success m-1">Matriculados: {{totalMatriculados}}</div>
+            </div>
+        </div>
+    </div>
+
+
+    <table class="table table-striped">
+
+        <thead style="font-size: 14px;">
+            <tr class="text-center">
+                <th>Estudiante</th>
+                <th>Cedula</th>
+                <th>Ultima Modificación</th>
+                <th>Archivo</th>
+                <th>Estado</th>
+                <th>Correcciones</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+
+        <tbody style="font-size: 15px;text-align: center;">
+            <tr *ngFor="let solicitud of solicitudes;let i = index">
+                <td>{{solicitud.estudiante}}</td>
+                <td>{{solicitud.cedula}}</td>
+                <td>{{solicitud.fecha_modificacion| date:"dd-MM-yyyy HH:mm"}}</td>
+                <td><a style="text-decoration: underline" *ngIf="solicitud.archivo!=null"
+                        href="https://www.itspm.edu.ec:8443/api/upload/{{solicitud.ruta+'/'+solicitud.archivo}}">
+                        {{solicitud.archivo}}</a></td>
+                <td>
+                    <div *ngIf="solicitud.tipo=='Corregir'" class="badge badge-warning">
+                        {{solicitud.tipo}}
+                    </div>
+
+                    <div *ngIf="solicitud.tipo=='En revisión'" class="badge badge-secondary">
+                        {{solicitud.tipo}}
+                    </div>
+
+                    <div *ngIf="solicitud.tipo=='Corregido'" class="badge badge-primary">
+                        {{solicitud.tipo}}
+                    </div>
+                    <div *ngIf="solicitud.tipo=='Matriculado'" class="badge badge-success">
+                        {{solicitud.tipo}}
+                    </div>
+                    <div *ngIf="solicitud.tipo=='Documentos Aprobados'" class="badge badge-info">
+                        {{solicitud.tipo}}
+                    </div>
+
+
+                </td>
+                <td style="font-size: 14px;">
+                    <div *ngIf="solicitud?.observaciones=='' || solicitud?.observaciones==null">
+                        Ninguna
+                    </div>
+
+                    <div *ngIf="solicitud?.observaciones!='' || solicitud?.observaciones!=null">
+                        <div *ngIf="solicitud?.observaciones?.length > 1">
+                            <div id="accordion" *ngIf="solicitud?.observaciones !=''">
+
+                                <button attr.data-target="#docente{{i}}" class="btn btn-link" data-toggle="collapse"
+                                    data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    Ver Correcciones <i class="fas fa-caret-down"></i>
+                                </button>
+
+                                <div id="docente{{i}}" class="collapse" aria-labelledby="headingOne"
+                                    data-parent="#accordion">
+                                    <div class="card-body">
+                                        {{solicitud.observaciones}}
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </td>
+                <td>
+
+                    <div *ngIf="solicitud.tipo!='Matriculado'">
+                        <button class="btn btn-warning btn-xs" data-toggle="modal" data-target=".modal-correccion"
+                            (click)="enviarHijo(solicitud)">Correciones</button>
+                        <button class="btn btn-info btn-xs" (click)="aprobarDocs(solicitud)">Aprobar Documentos</button>
+                        <button class="btn btn-primary btn-xs" (click)="fijarUrl()"
+                            [routerLink]="['/matricula/form/solicitud', solicitud.id]">Matricular</button>
+                        <button *ngIf="authService.hasRole('ROLE_ADMIN')" class="btn btn-danger btn-xs"
+                            (click)="eliminar(solicitud)">Eliminar</button>
+                    </div>
+
+                    <div *ngIf="solicitud.tipo=='Matriculado'">
+                        Sin Acciones
+                    </div>
+                </td>
+
+            </tr>
+        </tbody>
+
+    </table>
+</div>
+
+<app-modal-correccion (solicitudEnviar)="recibirSolicitudHijo($event)"></app-modal-correccion>

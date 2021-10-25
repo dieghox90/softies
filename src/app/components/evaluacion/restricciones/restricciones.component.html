@@ -1,0 +1,78 @@
+<h3 class="text-center text-secondary py-3">RESTRICCIONES</h3>
+
+<div class="card">
+    <div class="card-header bg-secondary text-white">
+        Configuración de Evaluadores
+    </div>
+    <div class="card-body">
+        <form>
+
+            <div class="form-group">
+                <label for="">Periodo Lectivo:</label>
+                <div>{{periodo?.periodo_academico}}</div>
+            </div>
+
+            <mat-form-field class="w-100">
+                <label class="font-weight-bold" for="clasificacion">Evaluacion - Clasificación</label>
+                <mat-select [compareWith]="compararEvaluacion" id="clasificacion" name="clasificacion"
+                    [(value)]="evaluacion">
+                    <mat-option [value]="undefined">--- Seleccione una Clasificacion ---</mat-option>
+                    <mat-option *ngFor="let e of evaluaciones" [value]="e">{{e.clasificacion.nombre}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <div class="form-group">
+                <label for="">Descripción:</label>
+                <div *ngIf="evaluacion?.id==null" class="alerta alert-w">
+                    Debe seleccionar una Evaluacion
+                </div>
+                <div *ngIf="evaluacion?.id">{{evaluacion?.descripcion}}</div>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+
+<h3 class="text-secondary py-3">RESTRICCIONES</h3>
+<div *ngIf="evaluacion?.id==null" class="alerta alert-w">
+    No ha seleccionado una Evaluación
+</div>
+<div *ngIf="evaluacion?.id">
+    <button (click)="enviarHijo()" data-toggle="modal" data-target=".modal-restriccion" class="btn btn-success">Agregar
+        Restricción</button>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Evaluador</th>
+                <th>Evaluados</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let evaluador of evaluacion.evaluadores">
+                <td>{{evaluador.nombre_evaluador}}</td>
+                <td>
+                    <ng-container *ngFor="let evaluado of evaluador.evaluados; index as i">
+                        <div>
+                            <strong>{{i+1}}</strong> {{evaluado.nombre_evaluado}}
+                        </div>
+                    </ng-container>
+                </td>
+                <td>
+                    <button (click)="enviarEvaluadorHijo(evaluador)" data-toggle="modal"
+                        data-target=".modal-restriccion" class="btn btn-info btn-sm">Editar</button>
+                    <button (click)="eliminar(evaluador)" class="btn btn-danger btn-sm">Eliminar</button>
+                </td>
+
+            </tr>
+
+        </tbody>
+    </table>
+
+
+</div>
+
+<app-modal-restriccion (evaluacionEnviar)="recibirEvaluacionHijo($event)"></app-modal-restriccion>

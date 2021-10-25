@@ -1,0 +1,154 @@
+<div class=" modal fade bd-example-modal-xl" data-backdrop="static" data-target="#staticBackdrop" role="dialog"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title w-100 text-center" id="staticBackdropLabel"> Carga Horaria <br>
+                    <p *ngIf="docenteModal.id" class="text-primary">{{docenteModal.nombre}}</p>
+                </h5>
+
+            </div>
+            <div class="modal-body">
+
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="card bg-secondary">
+                            <div class="card-header text-center text-white">Selección de Asignaturas</div>
+                            <div class="card-body">
+                                <form>
+                                    <div class="form-group">
+                                        <label for="carrera" class=" font-weight-bold">Carrera:</label>
+                                        <select name="carrera" id="carrera" [(ngModel)]="carrera" class="form-control">
+                                            <option [value]="">---
+                                                Seleccione una Carrera ---</option>
+                                            <option *ngFor="let c of carreras" [ngValue]="c">{{c.nombre}}
+                                            </option>
+
+                                        </select>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label for="ciclo" class=" font-weight-bold">Ciclo:</label>
+                                        <select name="ciclo" id="ciclo" (change)="cambiarCiclo()" [(ngModel)]="ciclo"
+                                            class="form-control" id="ciclo">
+                                            <option [ngValue]="undefined">---
+                                                Seleccione un Ciclo ---</option>
+                                            <option *ngFor="let c of carrera.ciclos" [ngValue]="c">{{c.nombre}}
+                                            </option>
+
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="paralelo" class=" font-weight-bold">Paralelo:</label>
+                                        <select name="paralelo" [(ngModel)]="paralelo" class="form-control"
+                                            id="paralelos">
+                                            <option [ngValue]="undefined">---
+                                                Seleccione un Paralelo ---</option>
+                                            <option *ngFor="let p of ciclo.paralelos" [ngValue]="p">{{p.nombre}}
+                                            </option>
+
+                                        </select>
+                                    </div>
+
+
+                                    <label class="font-weight-bold" for="paralelos">Asignaturas:</label>
+                                    <div *ngIf="!paralelo.id" class="alerta alert-w">
+                                        Sin Asignaturas
+                                    </div>
+
+                                    <div *ngIf="paralelo.id">
+
+                                        <table class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Nombre</th>
+                                                    <th>Asignar</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                                <tr *ngFor="let asignatura of ciclo.asignaturas">
+                                                    <td>{{asignatura.nombre}}</td>
+                                                    <td><button (click)="asignar(asignatura)"
+                                                            class="btn btn-primary btn-sm"><i
+                                                                class="fas fa-plus"></i></button>
+                                                    </td>
+                                                </tr>
+
+                                            </tbody>
+
+                                        </table>
+                                    </div>
+
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-7">
+
+
+                        <div class="card">
+                            <div class="card-header text-center bg-info text-white">Asignaturas asignadas</div>
+                            <div class="card-body">
+
+                                <div *ngIf="cargasHorarias.length==0" class="alerta alert-w">
+                                    Seleccione un Paralelo
+                                </div>
+
+
+                                <table class="table table-striped" *ngIf="cargasHorarias.length!=0">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                Asignatura
+                                            </th>
+                                            <th>
+                                                Paralelo
+                                            </th>
+                                            <th>
+                                                Ciclo
+                                            </th>
+                                            <th>
+                                                Carrera
+                                            </th>
+                                            <th>
+                                                Quitar
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="text-center">
+                                        <tr *ngFor="let ch of cargasHorarias">
+                                            <td>{{ch.asignatura.nombre}}</td>
+                                            <td>{{ch.paralelo.nombre}}</td>
+                                            <td>{{ch.asignatura.ciclo.nombre}}</td>
+                                            <td>{{ch.asignatura.ciclo.carrera.nombre}}</td>
+                                            <td><button (click)="eliminar(ch)" class="btn btn-danger btn-sm" btn-sm><i
+                                                        class="fas fa-times-circle"></i> </button></td>
+                                        </tr>
+                                    </tbody>
+
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button (click)="fijarPadre()" type="button" cl class="btn btn-danger" data-dismiss="modal"> <i
+                        class="fas fa-check-circle btn-sm"></i>
+                    Aceptar</button>
+
+                <button type="button" cl class="btn btn-danger" data-dismiss="modal"> <i
+                        class="fas fa-times-circle btn-sm"></i>
+                    Cancelar</button>
+
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,73 @@
+<h3 class="text-center text-secondary py-3">{{pregunta.id ? 'EDITAR PREGUNTA': 'NUEVA PREGUNTA'}}</h3>
+
+<div class="card">
+    <div class="card-header bg-secondary text-white">
+        Datos
+    </div>
+    <div class="card-body">
+        <form>
+
+            <label class="font-weight-bold" for="periodo">Periodo Lectivo</label>
+            <div>{{periodo.periodo_academico}}</div>
+
+            <mat-form-field class="w-100">
+                <label class="font-weight-bold" for="criterio">Criterio</label>
+                <mat-select [compareWith]="compararCriterio" id="criterio" name="criterio" [(value)]="criterio">
+                    <mat-option [value]="undefined">--- Seleccione un Criterio ---</mat-option>
+                    <mat-option *ngFor="let c of criterios" [value]="c">{{c.nombre}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="w-100">
+                <label class="font-weight-bold" for="subcriterio">Subcriterio</label>
+                <mat-select [compareWith]="compararSubcriterio" id="subcriterio" name="subcriterio"
+                    [(value)]="subcriterio">
+                    <mat-option [value]="undefined">--- Seleccione un Subcriterio ---</mat-option>
+                    <mat-option *ngFor="let sub of criterio.subcriterios" [value]="sub">{{sub.nombre}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="w-100">
+                <label class="font-weight-bold" for="tipo_pregunta">Tipo de Pregunta</label>
+                <mat-select [compareWith]="compararTipo" id="tipo_pregunta" name="tipo_pregunta"
+                    [(value)]="tipo_pregunta">
+                    <mat-option [value]="undefined">--- Seleccione un Tipo ---</mat-option>
+                    <mat-option *ngFor="let tp of tipos_preguntas" [value]="tp">{{tp.nombre}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+
+            <div class="form-group">
+                <label class="font-weight-bold" for="posicion">Posición</label>
+                <textarea [(ngModel)]="pregunta.posicion" class="form-control" id="posicion" name="posicion"></textarea>
+            </div>
+
+
+            <div class="form-group">
+                <label class="font-weight-bold" for="enunciado">Enunciado</label>
+                <textarea [(ngModel)]="pregunta.enunciado" class="form-control" id="enunciado"
+                    name="enunciado"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label class="font-weight-bold" for="enunciado">Evaluaciones a las que pertenece</label>
+                <div class="custom-control custom-checkbox" *ngFor="let evaluacion of evaluacionesPresentar">
+                    <input (change)="seleccionarEvaluacion($event,evaluacion.etiqueta)" type="checkbox"
+                        class="custom-control-input" id="{{evaluacion.id}}" [checked]="evaluacion.estado"
+                        value="{{evaluacion.etiqueta}}">
+                    <label class="custom-control-label"
+                        for="{{evaluacion.id}}">{{evaluacion.clasificacion.nombre}}</label>
+                </div>
+            </div>
+
+
+
+            <button (click)="pregunta.id ? editar():crear()" class="btn btn-primary btn-sm " data-dismiss="modal">
+                <i class="fas fa-download"></i>
+                {{pregunta.id ? 'Actualizar':'Guardar'}}</button>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,72 @@
+<h3 class="text-center text-secondary py-3">Resultados</h3>
+
+
+<label class="font-weight-bold" for="periodo">Periodo Lectivo</label>
+<div> {{nombre_periodo}}</div>
+
+
+<button (click)="generarInforme()" class="btn btn-primary my-4">
+    Generar Informe
+</button>
+
+<div class="accordion" id="accordionExample">
+    <div class="card" *ngFor=" let docente of docentesResultados;let i = index">
+        <div class="card-header bg-secondary" id=" headingOne">
+            <h5 class="mb-0">
+                <button class="btn btn-link text-white" type="button" data-toggle="collapse"
+                    attr.data-target="#docente{{i}}" aria-expanded="true" aria-controls="collapseOne">
+                    {{docente.nombre}} {{docente.apellido}} <i class="fas fa-chevron-circle-down"></i>
+                </button>
+            </h5>
+        </div>
+
+        <div id="docente{{i}}" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+            <div class="card-body">
+
+                <div *ngFor="let evaluacion of docente.evaluaciones">
+
+                    <div class="alerta alert-p text-center">
+                        <strong>{{evaluacion.clasificacion.nombre}}</strong>
+
+                    </div>
+                    <div *ngIf="evaluacion?.resultados.length==0" class="alerta alert-d">
+                        <strong>Aviso</strong>
+                        No hay resultados aún para esta evaluación
+                    </div>
+                    <table *ngIf="evaluacion?.resultados.length>0" class="table table-bordered"
+                        style="text-align: center;">
+                        <thead>
+                            <tr>
+                                <th *ngFor="let resultado of evaluacion.resultados; first as first;last as last">
+                                    {{resultado.nombre}}
+                                </th>
+                                <th>
+                                    <!-- [ngClass]="{'last': last}" -->
+                                    Detalle
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td *ngFor="let resultado of evaluacion.resultados;first as first; last as last"
+                                    [ngClass]="{'first': first, 'last': last}">
+                                    {{resultado.total}}
+                                </td>
+                                <td>
+                                    <!-- [ngClass]="{'last': last}" -->
+                                    <button (click)=" irDetalle(evaluacion)" data-toggle="modal"
+                                        data-target="#modalDetalleEva" class="btn btn-info btn-sm">Ver Detalle</button>
+                                </td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<app-detalle-modal></app-detalle-modal>

@@ -1,0 +1,31 @@
+<button data-toggle="modal" data-target=".modal-criterio" class="btn btn-success"> <i class="fas fa-plus"></i> Nuevo
+    Dominio</button>
+
+<h3 class="text-center text-secondary py-3">DOMINIOS Y SUBDOMINIOS</h3>
+<table class="table table-striped">
+
+    <thead>
+        <tr>
+            <th>Criterio</th>
+            <th>Subcriterio</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let criterio of criterios">
+            <td>{{criterio.nombre}}</td>
+            <td>
+                <ng-container *ngFor="let sub of criterio.subcriterios; index as i">
+                    <div>
+                        <strong>{{i+1}}</strong> {{sub.nombre}}
+                    </div>
+                </ng-container>
+            </td>
+            <td><button data-toggle="modal" data-target=".modal-criterio" (click)="enviarHijo(criterio)"
+                    class="btn btn-info btn-sm">Editar</button></td>
+        </tr>
+    </tbody>
+
+</table>
+
+<app-modal-criterio (criteriosEnviar)="recibirCriteriosHijo($event)"></app-modal-criterio>

@@ -1,0 +1,40 @@
+<h3 class="text-center text-secondary py-3">DOCENTES</h3>
+<table class="table table-striped">
+
+    <thead class="bg-secondary text-white">
+        <tr>
+
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Cedula</th>
+            <th>Roles</th>
+            <th>Titulos</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr *ngFor="let docente of docentes">
+            <td>{{docente.nombre}}</td>
+            <td>{{docente.apellido}}</td>
+            <td>{{docente.cedula}}</td>
+            <td>
+                <ng-container *ngFor="let rol of docente?.usuario?.roles; index as i">
+                    <div>
+                        <strong>-</strong> {{rol?.etiqueta}}
+                    </div>
+                </ng-container>
+            </td>
+            <td>{{docente.titulo}}</td>
+            <td>
+                <button [routerLink]="['/docente/form',docente.id]" class="btn btn-info btn-sm">Editar</button>
+
+                <button (click)="eliminar(docente)" class="btn btn-danger btn-sm">Inactivar</button>
+            </td>
+        </tr>
+    </tbody>
+
+</table>
+<mat-paginator class="float-left mx-2" showFirstLastButtons (page)="paginar($event)" [pageIndex]="paginaActual"
+    [length]="totalRegistros" [pageSize]="totalPorPagina" [pageSizeOptions]="pageSizeOptions">
+</mat-paginator>

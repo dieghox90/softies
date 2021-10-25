@@ -1,0 +1,37 @@
+<h3 class="text-center text-secondary py-3">{{cargaHoraria?.asignatura?.nombre}}</h3>
+
+<h4 class="text-secondary">Planes Semanales</h4>
+<div *ngIf="cargaHoraria?.planificacion?.id==null" class="alerta alert-w">
+    Para poder ver la planificación de cada semana el docente debe subir primero el silabo o la guia de la Asignatura.
+</div>
+
+<div *ngIf="cargaHoraria?.planificacion?.id">
+    <div class="accordion" id="accordionExample">
+        <div class="card" *ngFor=" let plan of cargaHoraria?.planificacion?.planes_semanales;let i = index">
+            <div class="card-header bg-secondary" id=" headingOne">
+                <h5 class="mb-0">
+                    <button class="btn btn-link text-white" type="button" data-toggle="collapse"
+                        attr.data-target="#plan{{i}}" aria-expanded="true" aria-controls="collapseOne">
+                        <strong>Semana: </strong>{{plan.numero_semana}} <i class="fas fa-chevron-circle-down"></i>
+                    </button>
+                </h5>
+            </div>
+
+            <div id="plan{{i}}" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+                <div class="card-body">
+                    <div *ngIf="plan?.plan==null" class="alerta alert-w">
+                        El docente aún no sube el plan de la semana {{plan?.numero_semana}}
+                    </div>
+
+                    <div *ngIf="plan?.plan!=null" class="alerta alert-p">
+                        <a style="text-decoration: underline"
+                            href="https://www.itspm.edu.ec:8443/api/upload/{{plan?.ruta+'/'+plan?.plan}}">
+                            Documento : {{plan?.plan}}</a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

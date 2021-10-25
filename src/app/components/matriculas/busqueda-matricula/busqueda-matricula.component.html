@@ -1,0 +1,113 @@
+<h3 class="text-center text-secondary py-4">{{titulo}}</h3>
+
+<div class=" card">
+    <div class="card-header font-weight-bold text-white bg-secondary">
+
+        <div>
+            <div>Formulario de Búesqueda</div>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <form>
+            <div class="form-group">
+                <label class="font-weight-bold" for="cedula">Cédula del Estudiante</label>
+                <input [(ngModel)]="cedula" class="form-control" type="text" id="cedula" name="cedula">
+            </div>
+
+
+            <div class="form-group">
+                <button (click)="buscar()" style="width: 100%;" class="btn btn-success">
+                    <i class="fas fa-search"></i>
+                    Buscar
+                </button>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+<hr>
+<h4 class="text-secondary">Estudiante</h4>
+<div class="alert alert-w" style="background: #fff3cd;" role="alert" *ngIf="!estudiante.id">
+    No existe ningún registro
+</div>
+<div *ngIf="estudiante.id">
+    <table class="table">
+        <thead>
+            <th>
+                Nombres
+            </th>
+            <th>
+                Apellidos
+            </th>
+            <th>
+                Accion
+            </th>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>
+                    {{estudiante.nombre}}
+                </td>
+                <td>
+                    {{estudiante.apellido}}
+                </td>
+
+                <td>
+                    <button [routerLink]="['/matricula/form/create', estudiante.id]" (click)="fijarUrl()"
+                        class="btn btn-info">Nueva
+                        Matricula</button>
+                </td>
+            </tr>
+        </tbody>
+
+    </table>
+</div>
+
+<hr>
+<h4 class="text-secondary">Última Matrícula</h4>
+<div class="alert" style="background: #fff3cd;" role="alert" *ngIf="!estudiante.id">
+    No se a encontrado ningún registro
+</div>
+<div class="alert" style="background: #fff3cd;" role="alert" *ngIf="estudiante.id && estudiante.matriculas.length==0">
+    El estudiante seleccionado no tiene Expediente
+</div>
+
+<div class="accordion" id="accordionExample">
+    <div class="card" *ngFor=" let matricula of estudiante.matriculas;let i = index">
+        <div class="card-header bg-secondary" id=" headingOne">
+            <h5 class="mb-0">
+                <button class="btn btn-link text-white" type="button" data-toggle="collapse"
+                    attr.data-target="#matricula{{i}}" aria-expanded="true" aria-controls="collapseOne">
+                    {{matricula.periodo_lectivo.periodo_academico}} <i class="fas fa-chevron-circle-down"></i>
+                </button>
+            </h5>
+        </div>
+
+        <div id="matricula{{i}}" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+            <div class="card-body">
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Asignatura</th>
+                            <th>Ciclo</th>
+                            <th>Carrera</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let asig_matri of matricula.matriculas_asignaturas">
+                            <td>{{asig_matri.asignatura.nombre}}</td>
+                            <td>{{asig_matri.asignatura.ciclo.nombre}}</td>
+                            <td>{{asig_matri.asignatura.ciclo.carrera.nombre}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+</div>

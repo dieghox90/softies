@@ -1,0 +1,55 @@
+<div class="position-relative text-center">
+    <button routerLink="/periodos" [ngClass]=" periodo.id? '' :'d-none'" class="float-left btn btn-warning btn-sm my-3">
+        <i class="fas fa-backward"></i>
+        Regresar</button>
+    <h3 class="text-center text-secondary py-3">{{periodo.id ? 'EDITAR PERIODO LECTIVO': 'NUEVO PERIODO LECTIVO'}}</h3>
+
+</div>
+
+<div class="card  mb-3">
+    <div class="card-header font-weight-bold text-white bg-secondary">
+        Datos
+    </div>
+
+    <div class="card-body">
+
+        <form>
+            <div class="form-group">
+                <label class="font-weight-bold" for="periodo_academico">Periodo Académico</label>
+                <input placeholder="Ejem: Segundo 2019 - Primero 2020" [(ngModel)]="periodo.periodo_academico"
+                    class="form-control" type="text" id="periodo_academico" name="periodo_academico">
+            </div>
+
+            <div class="form-group">
+                <label class="font-weight-bold" for="fecha_inicio">Fecha de Inicio</label>
+                <br>
+                <input style="width: 80%;display: inline;" [matDatepicker]="matFechaInicio" class="form-control"
+                    [(ngModel)]="fechaInicio" name="fecha_inicio" id="fecha_inicio">
+                <mat-datepicker-toggle [for]="matFechaInicio"></mat-datepicker-toggle>
+                <mat-datepicker #matFechaInicio></mat-datepicker>
+            </div>
+
+            <div class="form-group">
+                <label class="font-weight-bold" for="fecha_fin">Fecha de Finalización</label>
+                <br>
+                <input style="width:80%;display: inline;" [matDatepicker]="matFechaFin" class="form-control"
+                    [(ngModel)]="fechaFin" name="fecha_fin" id="fecha_fin">
+                <mat-datepicker-toggle [for]="matFechaFin"></mat-datepicker-toggle>
+                <mat-datepicker #matFechaFin></mat-datepicker>
+            </div>
+
+
+
+
+        </form>
+
+        <div class="form-group">
+            <button style="width: 100%;" (click)="periodo.id ? editar():crear()" class="btn btn-primary">
+                <i [ngClass]="periodo.id ? 'fas fa-user-edit':'fas fa-download'"></i>
+                {{periodo.id ? 'Actualizar':'Guardar'}}
+            </button>
+        </div>
+
+
+    </div>
+</div>

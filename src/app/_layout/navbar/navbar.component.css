@@ -1,0 +1,87 @@
+/* verde 1 =   #59B373*/
+/* verde 2 =   #59B373*/
+
+
+
+
+
+
+
+#menu_top{
+    z-index: 999 !important;
+}
+
+#menu_izquierda{
+    background:#4E8F6B;
+}
+
+#menu_izquierda_logo{
+    background:#4E8F6B;
+    border-bottom: 1px solid white
+}
+
+#menu_izquierda .sidebar{
+    background:#4E8F6B;
+}
+
+
+
+
+#menu_izquierda nav ul li a{
+    color: white;
+}
+
+
+/* --- PARA EL SUBMENU ---*/
+#menu_izquierda nav ul li ul{
+    background:#68AF6D;
+    border-top-left-radius: 10px;
+    overflow: hidden;
+    
+}
+
+#menu_izquierda nav ul li a:hover{
+    background: rgba(0,0,0,0.3);
+    
+}
+
+
+/* PARA LOS ACTIVES Y HOVER DEL MENU DE LA IZQUIERDA*/
+
+[class*='sidebar-dark-'] .nav-sidebar > .nav-item.menu-open > .nav-link,
+[class*='sidebar-dark-'] .nav-sidebar > .nav-item:hover > .nav-link,
+[class*='sidebar-dark-'] .nav-sidebar > .nav-item > .nav-link:focus {
+  background-color:rgba(0,0,0,0.3);
+  color:white;
+  
+}
+
+ /* -------- cuando se colapsa el menu izquierdo - parrafos ----- */
+ .sidebar-mini.sidebar-collapse .sidebar .user-panel > .info,
+ .sidebar-mini.sidebar-collapse .nav-sidebar .nav-link p,
+ .sidebar-mini.sidebar-collapse .brand-text {
+    white-space: pre !important;
+
+ }
+
+
+ .parrafoColapsar{
+     white-space: normal;
+ }
+
+
+
+
+ #botonCerrar{
+    display: none;
+}
+
+ @media only screen and (max-width: 980px) and (min-width: 821px) {  
+    #botonCerrar{
+        display: block;
+    }
+}  
+ 
+
+
+

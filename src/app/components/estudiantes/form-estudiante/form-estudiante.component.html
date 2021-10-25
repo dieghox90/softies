@@ -1,0 +1,109 @@
+<div class="position-relative text-center">
+    <button routerLink="/estudiantes" [ngClass]="estudiante.id ? '':'d-none'"
+        class="float-left btn btn-warning btn-sm my-4"> <i class="fas fa-backward"></i>
+        Regresar</button>
+    <h3 class="text-center text-secondary py-3">{{estudiante.id ? 'EDITAR ESTUDIANTES': 'NUEVO ESTUDIANTE'}}</h3>
+</div>
+
+
+
+
+<form>
+    <div class="row ">
+        <div class="col-md-6">
+            <div class="card mb-3">
+                <div class="card-header text-white bg-info">DATOS INFORMATIVOS</div>
+                <div class="card-body">
+
+                    <div class="form-group">
+                        <label class="font-weight-bold" for="nombre">Nombre</label>
+                        <input [(ngModel)]="estudiante.nombre" class="form-control" type="text" id="nombre"
+                            name="nombre">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="apellido" class="font-weight-bold">Apellido</label>
+                        <input [(ngModel)]="estudiante.apellido" id="apellido" name="apellido" type="text"
+                            class="form-control">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="font-weight-bold" for="cedula">Cedula</label>
+                        <input [(ngModel)]="estudiante.cedula" class="form-control" type="text" id="cedula"
+                            name="cedula">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="font-weight-bold" for="cedula">Correo</label>
+                        <input [(ngModel)]="estudiante.correo" class="form-control" type="text" id="correo"
+                            name="correo">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="font-weight-bold" for="cedula">Celular</label>
+                        <input [(ngModel)]="estudiante.celular" class="form-control" type="text" id="celular"
+                            name="celular">
+                    </div>
+
+
+                    <mat-form-field class="w-100">
+                        <label class="font-weight-bold">Carrera*:</label>
+                        <mat-select [compareWith]="compararCarrera" [(value)]="carrera">
+                            <mat-option [value]="undefined">--- Seleccione una Carrera ---</mat-option>
+                            <mat-option *ngFor="let c of carreras" [value]="c">{{c.nombre}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <div *ngIf="estudiante?.id">
+                        <h3 class="text-center">Usuario</h3>
+                        <div class="form-group">
+                            <label class="font-weight-bold" for="cedula">Username</label>
+                            <input [(ngModel)]="username" class="form-control" type="text" id="username"
+                                name="username">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="font-weight-bold" for="cedula">Clave</label>
+                            <input [(ngModel)]="clave" class="form-control" type="text" id="clave" name="clave">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-6">
+            <div class="card   mb-3">
+                <div class="card-header text-white bg-info">DIRECCION</div>
+                <div class="card-body">
+
+                    <div class="form-group">
+                        <label class="font-weight-bold" for="calle_principal">Calle Principal</label>
+                        <input [(ngModel)]="estudiante.direccion.calle_principal" class="form-control" type="text"
+                            id="calle_principal" name="calle_principal">
+                    </div>
+                    <div class="form-group">
+                        <label class="font-weight-bold" for="calle_secundaria">Calle Secundaria</label>
+                        <input [(ngModel)]="estudiante.direccion.calle_secundaria" class="form-control" type="text"
+                            id="calle_secundaria" name="calle_secundaria">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="font-weight-bold" for="referencia">Referencia</label>
+                        <input [(ngModel)]="estudiante.direccion.referencia" class="form-control" type="text"
+                            id="referencia" name="referencia">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</form>
+
+<div class="form-group">
+    <button style="width: 100%;" (click)="estudiante.id ? editar():crear()" class="btn btn-primary">
+        <i [ngClass]="estudiante.id ?'fas fa-user-edit':'fas fa-download'"></i>
+        {{estudiante.id ? 'Actualizar':'Guardar'}}
+    </button>
+</div>

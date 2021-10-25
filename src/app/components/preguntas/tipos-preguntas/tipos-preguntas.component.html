@@ -1,0 +1,34 @@
+<button data-toggle="modal" data-target=".modal_tipo_repuesta" class="btn btn-success"> <i class="fas fa-plus"></i>
+    Nuevo Tipo</button>
+
+<table class="table table-striped">
+
+    <thead>
+        <tr>
+            <th>Tipo</th>
+            <th>Subtipo</th>
+            <th>Respuestas</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let tp of tipos_preguntas">
+            <td>{{tp.nombre}}</td>
+            <td>{{tp.subtipo}}</td>
+            <td>
+                <ng-container *ngFor="let tr of tp.tipo_respuestas; index as i">
+                    <div>
+                        <strong>{{i+1}}. </strong> {{tr.nombre}}
+                    </div>
+                </ng-container>
+            </td>
+            <td><button class="btn btn-info" data-toggle="modal" data-target=".modal_tipo_repuesta"
+                    (click)="enviarHijo(tp)" class="btn btn-info btn-sm"> <i class="fas fa-edit"></i>
+                    Editar </button>
+            </td>
+        </tr>
+    </tbody>
+
+</table>
+
+<app-modal-tipo-respuesta (tiposEnviar)="recibirTiposHijo($event)"></app-modal-tipo-respuesta>

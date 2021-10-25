@@ -1,0 +1,63 @@
+<h3 class="text-center text-secondary py-3">EVALUACIONES</h3>
+
+<h3 class="text-secondary py-2">Listado</h3>
+<div class="alert" style="background: #fff3cd;" role="alert">
+    No se a encontrado ningún registro
+    <br>
+    <br>
+    <button data-toggle="modal" data-target=".modal-evaluacion" class="btn btn-primary btn-sm"> <i
+            class="fas fa-database"></i> Cargar evaluaciones de otros
+        periodos</button>
+</div>
+
+
+
+<table *ngIf="evaluaciones?.length>0" class="table table-striped">
+    <thead>
+        <tr>
+            <th>Etiqueta</th>
+            <th>Criterio</th>
+            <th>Descripcion</th>
+            <th>Fecha Fin</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let evaluacion of evaluaciones">
+            <td>{{evaluacion.etiqueta}}</td>
+            <td>{{evaluacion.clasificacion.nombre}}</td>
+            <td>{{evaluacion.descripcion}}</td>
+            <td>{{evaluacion.fecha_fin| date:"dd-MM-yyyy HH:mm"}}</td>
+            <td><button [routerLink]="['/evaluacion/form',evaluacion.id]" router
+                    class="btn btn-info btn-sm">Editar</button>
+
+                <!--<button [routerLink]="['/evaluacion/form',evaluacion.id]" router class="btn btn-info btn-sm">Ver
+                    Preguntas</button>-->
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<!--
+<h3 class="text-secondary py-2">Preguntas</h3>
+<div class="alert" style="background: #fff3cd;" role="alert" *ngIf="evaluacion.preguntas.length==0">
+    No se a encontrado ningún registro
+</div>
+
+<table *ngIf="evaluacion.preguntas.length>0" class="table table-striped">
+    <thead>
+        <tr>
+            <th>Criterio</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td></td>
+        </tr>
+    </tbody>
+</table>
+-->
+
+
+<app-modal-copiar-evaluacion></app-modal-copiar-evaluacion>

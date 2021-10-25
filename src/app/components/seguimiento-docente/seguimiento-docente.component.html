@@ -1,0 +1,112 @@
+<h3 class="text-center text-secondary pt-4">SEGUIMIENTO DOCENTE</h3>
+
+<label class="badge badge-primary">Periodo Lectivo</label>
+<div>{{nombP}}</div>
+<br>
+
+<div class="card">
+    <div class="card-header bg-info text-white"> Seleccionar Docente </div>
+    <div class="card-body">
+        <mat-form-field class="w-100">
+            <label class="font-weight-bold w-100 text-center">Docente:</label>
+            <mat-select [compareWith]="compararDocente" [(value)]="docente" class="text-center">
+                <mat-option [value]="docenteDefault" disabled class="text-center">--- Seleccione un Docente ---
+                </mat-option>
+                <mat-option *ngFor="let d of docentes" class="text-center" [value]="d">{{d.apellido}} {{d.nombre}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <button (click)="buscarCarga()" class="btn btn-info" style="margin: auto; width: 200px;display: block;"> <i
+                class="fas fa-search"></i>
+            Cargar
+            Planes</button>
+    </div>
+
+</div>
+
+
+<h4 class="text-secondary pb-2">Carga Horaria</h4>
+<div class="alert" style="background: #fff3cd;" role="alert" *ngIf="cargas.length==0">
+    No se ha encontrado ningún registro
+</div>
+
+<div *ngIf="cargas.length > 0">
+
+    <div class="accordion" id="accordionExample">
+        <div class="card" *ngFor="let carga of cargas;let i = index">
+            <div class="card-header bg-secondary" id=" headingOne">
+                <h5 class="mb-0">
+                    <button attr.name="docente" class="btn btn-link text-white" type="button" data-toggle="collapse"
+                        attr.data-target="#docente{{i}}" aria-expanded="true" aria-controls="collapseOne">
+                        {{carga.asignatura.nombre}} <i class="fas fa-chevron-circle-down">
+                        </i>
+                    </button>
+                </h5>
+            </div>
+
+            <div id="docente{{i}}" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+                <div class="card-body">
+                    <span class="badge badge-primary">DATOS DE ASIGNATURA</span>
+
+                    <div><span class="badge badge-info mr-2">Carrera:
+                        </span>{{carga.asignatura.ciclo.carrera.nombre}}</div>
+
+                    <div><span class="badge badge-info mr-2">Ciclo:
+                        </span>{{carga.asignatura.ciclo.nombre}}</div>
+
+                    <div><span class="badge badge-info mr-2">Paralelo:
+                        </span>{{carga.paralelo.nombre}}</div>
+
+                    <div><span class="badge badge-info mr-2">Silabo:
+                        </span>
+                        <a style="text-decoration: underline"
+                            href="{{rutaArchivos+carga?.planificacion?.ruta_silabo+'/'+carga?.planificacion?.silabo}}">
+                            {{carga?.planificacion?.silabo}}</a>
+                    </div>
+
+                    <div><span class="badge badge-info mr-2">Guía:
+                        </span>
+                        <a style="text-decoration: underline"
+                            href="{{rutaArchivos+carga?.planificacion?.ruta_guia+'/'+carga?.planificacion?.guia}}">
+                            {{carga?.planificacion?.guia}}</a>
+                    </div>
+
+
+                    <h3 class="text-center my-4 text-success">Planes Semanales</h3>
+
+                    <div class="alerta alert-w" *ngIf="carga.planificacion==null">
+                        El docente aún no ha subido la Guía o el Sílabo, por lo que no tiene planes semanales
+                    </div>
+
+                    <table *ngIf="carga.planificacion!=null" class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Semana</th>
+                                <th>Inicio</th>
+                                <th>Fin</th>
+                                <th>Plan Semanal</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            <tr *ngFor="let plan of carga?.planificacion?.planes_semanales">
+                                <td>Semana {{plan.numero_semana}}</td>
+                                <td>{{plan.fecha_inicio}}</td>
+                                <td>{{plan.fecha_fin}}</td>
+                                <td>
+                                    <div>{{plan.ruta}}</div>
+                                </td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

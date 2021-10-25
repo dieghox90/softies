@@ -1,0 +1,105 @@
+<div style="margin-top: 80px;" *ngIf="evaluacion==null">
+    <div class="alerta alert-d">
+        <h2 class="text-center">Acceso denegado </h2>
+        <span class="badge badge-danger"> Aviso:</span>
+        <br>
+        <p>Al parecer no tienes permiso para acceder a este recurso {{authService.usuario.nombre}}, si crees que se
+            trata de
+            un error, por favor ponte en contacto con el Administrador del Sistema o deja un mensaje en nuestra
+            página del Facebook
+        </p>
+    </div>
+
+</div>
+
+<div *ngIf="evaluacion!=null">
+    <h3 class="text-center text-secondary py-3">{{evaluacion?.clasificacion?.nombre}}</h3>
+
+    <h5 class="badge badge-secondary" style="font-size: 15px;">Periodo</h5>
+    <div class="alerta alert-p">
+        <p>{{nombrePeriodo}}</p>
+    </div>
+
+    <h5 class="badge badge-secondary" style="font-size: 15px;">Descripción</h5>
+    <div class="alerta alert-p">
+        <p>{{evaluacion?.descripcion}}</p>
+    </div>
+
+    <!--
+    <h5 class="badge badge-secondary" style="font-size: 15px;">Evidencia de Evaluacion</h5>
+    <div class="alerta alert-w">
+        Una vez que complete la evaluación de este periodo académico, se le habilitará la opción
+        para que descargue el documento PDF.
+        <button (click)="generarPdf()">asdas</button>
+    </div>
+-->
+
+    <div *ngIf="evaluaciones.length==0" class="alerta alert-w">
+        <strong>Aviso</strong>
+        <br>
+        No cuenta con evaluaciones configuradas para la {{evaluacion?.clasificacion?.nombre}}, esto puede ocurrir porque
+        usted no participa en este tipo de Evaluación o que el encargado de la configuración se le pasó por alto,
+        por favor comuníquese con el Administrador del sistema para mayor información
+    </div>
+
+    <div *ngIf="evaluacion.preguntas.length==0" class="alerta alert-w">
+        <strong>Aviso</strong>
+        <br>
+        La evaluación no cuenta con un banco de peguntas asociado, por favor póngase en contacto con el Administrador
+        del sistema.
+
+    </div>
+
+    <table id="contenido" *ngIf="evaluaciones.length>0 && evaluacion?.preguntas.length>0" class="table table-striped">
+
+        <thead class="text-center">
+            <tr>
+                <th>
+                    Docente
+                </th>
+                <th *ngIf="authService.hasRole('ROLE_ESTUDIANTE')">Asignatura</th>
+                <th>Finalización</th>
+                <th>Preguntas</th>
+                <th>Avance</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+
+        <tbody class="text-center">
+            <tr *ngFor="let evaluacion of evaluaciones">
+                <td>{{evaluacion.nombre_evaluado}}</td>
+                <td *ngIf="authService.hasRole('ROLE_ESTUDIANTE')">{{evaluacion.asignatura}}</td>
+                <td>{{evaluacion.fecha_fin | date:"dd/MM/yyyy - HH:mm"}}</td>
+                <td>{{evaluacion.numero_preguntas}}</td>
+                <td> <span *ngIf="evaluacion.avance==0" class="badge badge-danger">
+                        {{evaluacion.avance}}/{{evaluacion.numero_preguntas}}
+                    </span>
+                    <span *ngIf="evaluacion.avance==evaluacion.numero_preguntas" class="badge badge-success">
+                        {{evaluacion.avance}}/{{evaluacion.numero_preguntas}}
+                    </span>
+
+                    <span *ngIf="evaluacion.avance != 0 && evaluacion.avance != evaluacion.numero_preguntas"
+                        class="badge badge-warning">
+                        {{evaluacion.avance}}/{{evaluacion.numero_preguntas}}
+                    </span>
+                </td>
+
+                <td>
+                    <div *ngIf="evaluacion.numero_preguntas > evaluacion.avance">
+                        <button *ngIf="habilitado" (click)="evaluar(evaluacion)"
+                            class="btn btn-info btn-sm">Evaluar</button>
+                        <div *ngIf="habilitado==false" class="text-danger">
+                            Expirado
+                        </div>
+                    </div>
+
+                    <div *ngIf="evaluacion.numero_preguntas == evaluacion.avance" class="text-success">
+                        Completado
+                    </div>
+                </td>
+            </tr>
+
+        </tbody>
+
+    </table>
+</div>

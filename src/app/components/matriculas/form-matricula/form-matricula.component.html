@@ -1,0 +1,188 @@
+<div class="position-relative text-center">
+    <button (click)="regresar()" style="position: absolute; left: 10px;" class="float-left btn btn-warning btn-sm my-4">
+        <i class="fas fa-arrow-circle-left"></i> Regresar</button>
+
+    <h3 class="text-secondary text-center py-3">{{matricula.id ? 'EDITAR MATRICULAS':'NUEVA MATRICULA'}}</h3>
+</div>
+
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header text-center text-white bg-secondary">Datos del Estudiante</div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label class="font-weight-bold">Nombres y Apellidos</label>
+                    <p>{{estudiante.nombre}} {{estudiante.apellido}}</p>
+                </div>
+                <div class="form-group">
+                    <label class="font-weight-bold">Cédula</label>
+                    <p>{{estudiante.cedula}}</p>
+                </div>
+                <div class="form-group">
+                    <label class="font-weight-bold">Correo</label>
+                    <p>{{estudiante.correo}}</p>
+                </div>
+
+
+                <div *ngIf="actividad=='nuevo'">
+                    <hr>
+                    <h5 class="text-secondary text-center">Última Matrícula</h5>
+                    <div class="accordion" id="accordionExample">
+                        <div class="card" *ngFor=" let matricula of estudiante.matriculas;let i = index">
+                            <div class="card-header bg-success" id=" headingOne">
+                                <h5 class="mb-0">
+                                    <button class="btn btn-link text-white" type="button" data-toggle="collapse"
+                                        attr.data-target="#matricula{{i}}" aria-expanded="true"
+                                        aria-controls="collapseOne">
+                                        {{matricula.periodo_lectivo.periodo_academico}} <i
+                                            class="fas fa-chevron-circle-down"></i>
+                                    </button>
+                                </h5>
+                            </div>
+
+                            <div id="matricula{{i}}" class="collapse" aria-labelledby="headingOne"
+                                data-parent="#accordionExample">
+                                <div class="card-body">
+
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Asignatura</th>
+                                                <th>Ciclo</th>
+                                                <th>Carrera</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let asig_matri of matricula.matriculas_asignaturas">
+                                                <td>{{asig_matri.asignatura.nombre}}</td>
+                                                <td>{{asig_matri.asignatura.ciclo.nombre}}</td>
+                                                <td>{{asig_matri.asignatura.ciclo.carrera.nombre}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+
+    </div>
+
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header text-center text-white bg-info">Datos de Matrícula</div>
+            <div class="card-body">
+
+                <form>
+
+                    <div class="form-group">
+                        <label class="font-weight-bold">Periodo:</label>
+                        <div>{{periodo.periodo_academico}}</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="font-weight-bold">Número*:</label>
+                        <br>
+                        <input type="text" class="form-control" name="numero" id="numero"
+                            [(ngModel)]="matricula.numero">
+                    </div>
+
+
+                    <mat-form-field class="w-100">
+                        <label class="font-weight-bold">Carrera*:</label>
+                        <mat-select [compareWith]="compararCarrera" [(value)]="carrera">
+                            <mat-option [value]="undefined">--- Seleccione una Carrera ---</mat-option>
+                            <mat-option *ngFor="let c of carreras" [value]="c">{{c.nombre}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field class="w-100">
+                        <label class="font-weight-bold">Ciclo*:</label>
+                        <mat-select [compareWith]="compararCiclo" [(value)]="ciclo">
+                            <mat-option [value]="undefined">--- Seleccione un Ciclo ---</mat-option>
+                            <mat-option *ngFor="let c of carrera.ciclos" [value]="c">{{c.nombre}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+
+
+                    <mat-form-field class="w-100">
+                        <label class="font-weight-bold">Paralelo*:</label>
+                        <mat-select [compareWith]="compararParalelo" [(value)]="paralelo" (change)="cambiar($event)">
+                            <mat-option [value]="undefined">--- Seleccione un Paralelo ---</mat-option>
+                            <mat-option *ngFor="let p of ciclo.paralelos" [value]="p">{{p.nombre}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+
+                    <mat-form-field class="w-100">
+                        <label class="font-weight-bold">Número de matrícula*:</label>
+                        <mat-select [(value)]="matricula.numero_matricula">
+                            <mat-option [value]="1">Primera</mat-option>
+                            <mat-option [value]="2">Segunda</mat-option>
+                            <mat-option [value]="3">Tercera</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field class="w-100">
+                        <label class="font-weight-bold">Tipo de matrícula*:</label>
+                        <mat-select [(value)]="matricula.tipo_matricula">
+                            <mat-option value="Ordinaria">Ordinaria</mat-option>
+                            <mat-option value="Extraordinaria">Extraordinaria</mat-option>
+                            <mat-option value="Especial">Especial</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+
+                    <div class="form-group">
+                        <label class="font-weight-bold">Pérdida de Gratuidad:</label>
+                        <br>
+                        <mat-radio-group aria-label="Select an option" name="gratuidad"
+                            [(ngModel)]="matricula.perdida_gratuidad">
+                            <mat-radio-button [value]="false">No</mat-radio-button>
+                            <mat-radio-button [value]="true">Si</mat-radio-button>
+                        </mat-radio-group>
+                    </div>
+
+
+                    <label class="font-weight-bold" for="paralelos">Asignaturas:</label>
+                    <div *ngIf="!paralelo.id" class="alerta alert-w">
+                        Seleccione un Paralelo
+                    </div>
+
+                    <div *ngIf="paralelo.id">
+                        <div class="form-group">
+                            <div class="custom-control custom-checkbox" *ngFor="let asignatura of ciclo.asignaturas">
+                                <input (change)="seleccionarMateria($event,asignatura.nombre)" type="checkbox"
+                                    class="custom-control-input" id="{{asignatura.id}}"
+                                    [checked]="asignatura.estado_asig_mat" value="{{asignatura.nombre}}">
+                                <label class="custom-control-label"
+                                    for="{{asignatura.id}}">{{asignatura.nombre}}</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button (click)="matricula.id ? editar():crear()" style="width: 100%;" class="btn btn-info">
+                        <i class="fas fa-download"></i>
+                        {{matricula.id ? 'Actualizar':'Guardar'}}
+                    </button>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+</div>

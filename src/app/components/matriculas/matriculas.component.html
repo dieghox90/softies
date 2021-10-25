@@ -1,0 +1,122 @@
+<h3 class="text-center text-secondary py-4">{{titulo}}</h3>
+
+<div id="accordion">
+    <div class="card">
+        <div class="card-header" id="headingOne">
+            <h5 class="mb-0">
+                <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true"
+                    aria-controls="collapseOne">
+                    Buscar por paralelo y ciclo <i class="fas fa-caret-down"></i>
+                </button>
+            </h5>
+        </div>
+
+        <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+            <div class="card-body">
+                <form>
+                    <label class="font-weight-bold w-100 text-center">Periodo:</label>
+                    <div class="text-center">{{nomPeriodo}}</div>
+                    <mat-form-field class="w-100 text-center">
+                        <label class="font-weight-bold w-100 text-center">Carrera*:</label>
+                        <mat-select (selectionChange)="cambiarCarrera($event)" [(value)]="carrera" class="tex-center">
+                            <mat-option [value]="undefined" class="text-center">--- Seleccione una Carrera ---
+                            </mat-option>
+                            <mat-option *ngFor="let c of carreras" class="text-center" [value]="c">{{c.nombre}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field class="w-100">
+                        <label class="font-weight-bold w-100 text-center">Ciclo*:</label>
+                        <mat-select [(value)]="ciclo" class="text-center">
+                            <mat-option [value]="undefined" class="text-center">--- Seleccione un Ciclo ---</mat-option>
+                            <mat-option *ngFor="let c of carrera.ciclos" class="text-center" [value]="c">{{c.nombre}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+
+
+                    <mat-form-field class="w-100">
+                        <label class="font-weight-bold w-100 text-center">Paralelo*:</label>
+                        <mat-select (selectionChange)="cambiarParalelo($event)" [(value)]="busquedaParalelo"
+                            class="text-center">
+                            <mat-option [value]="undefined" class="text-center">--- Seleccione un Paralelo ---
+                            </mat-option>
+                            <mat-option *ngFor="let p of ciclo.paralelos" class="text-center" [value]="p.nombre">
+                                {{p.nombre}}
+                            </mat-option>
+                            <mat-option *ngIf="ciclo?.id != null" class="text-center" value="Todos">
+                                <div>Todos</div>
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </form>
+
+                <div class="form-group">
+                    <button (click)="buscarParalelo()" style="width: 100%;" class="btn btn-info">
+                        <i class="fas fa-search"></i>
+                        Buscar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr>
+
+
+<div *ngIf="busqueda == 'ciclo'">
+    <h4 class="text-secondary text-center">Matriculados</h4>
+
+    <div *ngIf="matriculas?.length == 0" class="alerta alert-w">
+        {{mensaje}}
+    </div>
+
+    <div *ngIf="matriculas?.length > 0">
+        <div style="margin-bottom: 6px;">
+            <button class="btn btn-success btn-xs" (click)="exportar()"> <i class="fas fa-file-excel"></i>
+                Exportar
+                Matriculados</button>
+
+            <button class="btn btn-info btn-xs" (click)="exportarDetalle()"> <i class="fas fa-file-excel"></i>
+                Exportar
+                Matriculados con Asignaturas</button>
+        </div>
+
+        <table class="table table-striped" style="margin-top: 5px;">
+
+            <thead class="text-center">
+                <tr>
+                    <th>Estudiante</th>
+                    <th>Cédula</th>
+                    <th>Ciclo</th>
+                    <th>Paralelo</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+
+            <tbody class="text-center">
+                <tr *ngFor="let matricula of matriculas">
+                    <td>{{matricula.estudiante.apellido}} {{matricula.estudiante.nombre}}</td>
+                    <td>{{matricula.estudiante.cedula}} </td>
+                    <td>{{matricula.paralelo.ciclo.nombre}} </td>
+                    <td>{{matricula.paralelo.nombre}} </td>
+                    <td>
+                        <button (click)="enviarHijo(matricula)" data-toggle="modal" data-target=".detalleMatricula"
+                            class="btn btn-primary btn-sm"> <i class="fas fa-eye"></i> Ver Detalle</button>
+                        <button [routerLink]="['/matricula/form/edit',matricula.id]" (click)="fijarUrl()"
+                            class="btn btn-info btn-sm"><i class="fas fa-edit"></i> Editar</button>
+                    </td>
+                </tr>
+            </tbody>
+
+        </table>
+    </div>
+
+</div>
+
+
+
+<app-modal-detalle-matricula></app-modal-detalle-matricula>

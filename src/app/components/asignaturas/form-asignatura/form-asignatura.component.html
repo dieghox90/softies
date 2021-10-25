@@ -1,0 +1,79 @@
+<div class="position-relative text-center">
+    <button routerLink="/asignaturas" [ngClass]="asignatura.id ? '':'d-none'"
+        class="float-left btn btn-warning btn-sm my-3"> <i class="fas fa-backward"></i>
+        Regresar</button>
+    <h3 class="text-center text-secondary py-3">{{asignatura.id ? 'EDITAR ASIGNATURA': 'NUEVA ASIGNATURA'}}</h3>
+</div>
+
+
+
+<div class="card mb-3">
+    <div class="card-header font-weight-bold text-white bg-primary">
+        Datos
+    </div>
+
+
+    <div class="card-body">
+
+        <form>
+            <div class="form-group">
+                <label class="font-weight-bold" for="nombre">Nombre</label>
+                <input [(ngModel)]="asignatura.nombre" class="form-control" type="text" id="nombre" name="nombre">
+            </div>
+
+            <div class="form-group">
+                <label class="font-weight-bold" for="etiqueta">Etiqueta (Nombre Corto - 20 caracteres)</label>
+                <input maxlength="20" [(ngModel)]="asignatura.etiqueta" class="form-control" type="text" id="etiqueta"
+                    name="etiqueta">
+            </div>
+
+            <div class="form-group">
+                <label class="font-weight-bold" for="autonomos">Horas Autonomos</label>
+                <input [(ngModel)]="asignatura.numero_autonomos" class="form-control" type="text" id="autonomos"
+                    name="autonomos">
+            </div>
+
+            <div class="form-group">
+                <label class="font-weight-bold" for="docencia">Horas Docencia</label>
+                <input [(ngModel)]="asignatura.numero_docencia" class="form-control" type="text" id="docencia"
+                    name="docencia">
+            </div>
+
+
+            <div class="form-group">
+                <label class="font-weight-bold" for="experimentacion">Horas Experimentacion</label>
+                <input [(ngModel)]="asignatura.numero_experimentacion" class="form-control" type="text"
+                    id="experimentacion" name="experimentacion">
+            </div>
+
+
+            <mat-form-field class="w-100">
+                <mat-label>Carrera</mat-label>
+                <mat-select [compareWith]="compararCarrera" [(value)]="carrera">
+                    <mat-option [value]="undefined">None</mat-option>
+                    <mat-option *ngFor="let c of carreras" [value]="c">{{c.nombre}}
+                    </mat-option>
+
+                </mat-select>
+            </mat-form-field>
+            <br>
+            <mat-form-field class="w-100">
+                <mat-label>Ciclo</mat-label>
+                <mat-select [compareWith]="compararCiclo" [(value)]="ciclo">
+                    <mat-option [value]="undefined">None</mat-option>
+                    <mat-option *ngFor="let c of carrera.ciclos" [value]="c">{{c.nombre}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </form>
+
+        <div class="form-group">
+            <button style="width: 100%;" (click)="asignatura.id ? editar():crear()" class="btn btn-primary">
+                <i [ngClass]="asignatura.id ? 'fas fa-user-edit':'fas fa-download'"></i>
+                {{asignatura.id ? 'Actualizar':'Guardar'}}
+            </button>
+        </div>
+
+
+    </div>
+</div>

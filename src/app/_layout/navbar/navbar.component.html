@@ -1,0 +1,556 @@
+<nav id="menu_top" class="main-header navbar navbar-expand">
+  <!-- Left navbar links -->
+  <ul class="nav navbar-nav pull-sm-left">
+    <li class="nav-item">
+      <a class="nav-link" (click)="expandirMenu()" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i> Menú</a>
+    </li>
+  </ul>
+  <ul class="nav navbar-nav navbar-logo mx-auto">
+    <li class="nav-item mx-auto">
+
+       <div *ngIf="authService.hasRole('ROLE_ADMIN')">
+
+      <div class="badge badge-secondary text-center w-100">Periodos:</div>
+      <select [compareWith]="compararPeriodo" class="form-control text-center" #p (ngModelChange)="onChange($event)"
+        style="background-color:transparent;border: none;color: white;" [(ngModel)]="periodo" name="periodo">
+        <option style="color:black;text-align: center;" *ngFor="let p of periodos" [ngValue]="p">
+          {{p.periodo_academico}}</option>
+      </select>
+        </div>
+
+      
+      <div *ngIf="authService.hasRole('ROLE_ESTUDIANTE') || authService.hasRole('ROLE_SECRETARIA')" class="text-white">
+        <div class="badge badge-secondary text-center w-100">Periodo:</div>
+        <br>
+        {{periodoActual.periodo_academico}}
+      </div>
+
+    </li>
+  </ul>
+
+  <!-- Right navbar links -->
+  <ul class="nav navbar-nav pull-sm-right">
+    <li class="nav-item dropdown">
+      <a class="btn btn-secondary btn-sm" data-toggle="dropdown" href="#">
+        <span *ngIf="authService.isAuthenticated()">{{authService.usuario.nombre}} </span> <i
+          class="fas fa-angle-down"></i>
+      </a>
+      <div class="dropdown-menu dropdown-menu-sm-right">
+        <button class="dropdown-item" (click)="logout()"><i class="fas fa-sign-out-alt"></i> Salir</button>
+      </div>
+
+    </li>
+
+
+  </ul>
+</nav>
+<!-- /.navbar -->
+
+
+
+<!-- Main Sidebar Container -->
+<aside id="menu_izquierda" class="main-sidebar sidebar-dark-primary elevation-4">
+  <!-- Brand Logo -->
+
+  <a id="menu_izquierda_logo" href="#" routerLink="/home" class="brand-link">
+    <img id="logo" src="https://www.itspm.edu.ec/recursos/LOGOFIN.png" class="brand-image img-circle elevation-3">
+    <span class="brand-text font-weight-bold">PRIMERO DE MAYO</span>
+
+    <div>
+      <a id="botonCerrar" class="float-right" style="color:white;font-size: 15px;" data-widget="pushmenu" href="#"><i
+          class="fas fa-bars"></i>
+      </a>
+    </div>
+
+  </a>
+
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+
+    <!-- Sidebar user panel (optional) -->
+
+    <!-- Sidebar Menu -->
+    <nav id="menu_izquierda" class="mt-4">
+
+      <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+        <!-- ##################### ADMINISTRACION SGA ######################## -->
+        <!-- ESTUDIANTES -->
+        <li *ngIf="authService.hasRole('ROLE_ADMIN') || authService.hasRole('ROLE_SECRETARIA')" class="nav-header">
+          ADMINISTRACIÓN</li>
+
+        <li *ngIf="authService.hasRole('ROLE_ADMIN') || authService.hasRole('ROLE_SECRETARIA')"
+          class="nav-item has-treeview ">
+          <a href="#" class="nav-link">
+            <i class="nav-icon fas fa-user-graduate"></i>
+            <p>
+              Estudiante
+              <i class="right fas fa-angle-left"></i></p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item" *ngIf="authService.hasRole('ROLE_ADMIN')">
+              <a routerLink="/estudiante/form" class="nav-link">
+                <i class="nav-icon fas fa-user-plus"></i>
+                <p>Nuevo Estudiante</p>
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a routerLink="/estudiantes" class="nav-link">
+                <i class="nav-icon fas fa-user-friends"></i>
+                <p>Estudiantes</p>
+              </a>
+            </li>
+          </ul>
+        </li>
+
+        <!-- DOCENTES -->
+
+        <li *ngIf="authService.hasRole('ROLE_ADMIN')" class="nav-item has-treeview">
+          <a href="#" class="nav-link">
+            <i class="nav-icon fas fa-user-tie"></i>
+            <p>
+              Funcionario
+              <i class="fas fa-angle-left right"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a routerLink="/docente/form" class="nav-link">
+                <i class="nav-icon fas fa-user-shield"></i>
+                <p> Nuevo Funcionario</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a routerLink="/docentes" class="nav-link">
+                <i class="nav-icon fas fa-users"></i>
+                <p>Funcionarios</p>
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a routerLink="/docentes-inactivos" class="nav-link">
+                <i class="nav-icon fas fa-user-minus"></i>
+                <p>Funcionarios Inactivos</p>
+              </a>
+            </li>
+
+          </ul>
+        </li>
+
+        <!-- PERIODOS -->
+
+        <li *ngIf="authService.hasRole('ROLE_ADMIN')" class="nav-item has-treeview">
+          <a href="#" class="nav-link">
+            <i class="nav-icon fas fa-calendar-alt"></i>
+            <p>
+              Periodo
+              <i class="fas fa-angle-left right"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a routerLink="/periodo/form" class="nav-link">
+                <i class="nav-icon fas fa-calendar-plus"></i>
+                <p> Nuevo Periodo</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a routerLink="/periodos" class="nav-link">
+                <i class="nav-icon fas fa-clone"></i>
+                <p>Periodos</p>
+              </a>
+            </li>
+          </ul>
+        </li>
+
+        <!-- MATRICULAS -->
+        <li *ngIf="authService.hasRole('ROLE_ESTUDIANTE')" class="nav-header">
+          MATRICULACIÓN</li>
+        <li
+          *ngIf="authService.hasRole('ROLE_SECRETARIA') || authService.hasRole('ROLE_ADMIN') || authService.hasRole('ROLE_ESTUDIANTE')"
+          class="nav-item has-treeview">
+          <a href="#" class="nav-link">
+            <i class="nav-icon fas fa-address-book"></i>
+            <p>
+              Matrículas
+              <i class="fas fa-angle-left right"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+
+
+            <li class="nav-item" *ngIf="authService.hasRole('ROLE_ESTUDIANTE') || authService.hasRole('ROLE_ADMIN') ">
+              <a routerLink="/form/solicitudes-matricula" class="nav-link">
+                <i class="nav-icon fas fa-paper-plane"></i>
+                <p> Solicitud Matricula</p>
+              </a>
+            </li>
+
+
+            <li class="nav-item" *ngIf="authService.hasRole('ROLE_SECRETARIA') || authService.hasRole('ROLE_ADMIN') ">
+              <a routerLink="/solicitudes-matricula" (click)="removerFiltros()" class="nav-link">
+                <i class="nav-icon fas fa-paste"></i>
+                <p> Solicitudes</p>
+              </a>
+            </li>
+
+            <li class="nav-item" *ngIf="authService.hasRole('ROLE_ADMIN') ||  authService.hasRole('ROLE_SECRETARIA')">
+              <a routerLink="/matricula-busqueda" class="nav-link">
+                <i class="nav-icon fas fa-diagnoses"></i>
+                <p> Nueva Matricula</p>
+              </a>
+            </li>
+            <li class="nav-item" *ngIf="authService.hasRole('ROLE_ADMIN') ||  authService.hasRole('ROLE_SECRETARIA')">
+              <a routerLink="/matriculas" class="nav-link">
+                <i class="nav-icon fas fa-id-card"></i>
+                <p>Matriculados</p>
+              </a>
+            </li>
+
+            <li class="nav-item" *ngIf="authService.hasRole('ROLE_ADMIN') ||  authService.hasRole('ROLE_SECRETARIA')">
+              <a routerLink="/matriculas-expedientes" class="nav-link">
+                <i class="nav-icon fas fa-graduation-cap"></i>
+                <p>Expedientes</p>
+              </a>
+            </li>
+          </ul>
+        </li>
+
+
+        <!-- CARREAS -->
+
+        <li *ngIf="authService.hasRole('ROLE_ADMIN')" class="nav-item has-treeview">
+          <a href="#" class="nav-link">
+            <i class="nav-icon fas fa-university"></i>
+            <p>
+              Carrera
+              <i class="fas fa-angle-left right"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a routerLink="/carrera/form" class="nav-link">
+                <i class="nav-icon fas fa-flask"></i>
+                <p> Nueva Carrera</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a routerLink="/carreras" class="nav-link">
+                <i class="nav-icon fas fa-layer-group"></i>
+                <p>Carreras</p>
+              </a>
+            </li>
+
+          </ul>
+        </li>
+
+        <!-- ASIGNATURAS -->
+        <li *ngIf="authService.hasRole('ROLE_ADMIN')" class="nav-item has-treeview">
+          <a href="#" class="nav-link">
+            <i class="nav-icon fas fa-book"></i>
+            <p>
+              Asignatura
+              <i class="fas fa-angle-left right"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a routerLink="/asignatura/form" class="nav-link">
+                <i class="nav-icon fas fa-book-reader"></i>
+                <p> Nueva Asignatura</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a routerLink="/asignaturas" (click)="removerFiltros()" class="nav-link">
+                <i class="nav-icon fas fa-swatchbook"></i>
+                <p>Asignaturas</p>
+              </a>
+            </li>
+          </ul>
+        </li>
+
+        <!-- DISTRIBUTIVO -->
+        <!-- 
+        <li *ngIf="authService.hasRole('ROLE_ADMIN')" class="nav-item has-treeview">
+          <a routerLink="/distributivo" class="nav-link">
+            <i class="nav-icon fas fa-chalkboard-teacher"></i>
+            <p>Distributivos</p>
+          </a>
+
+        </li>
+-->
+
+        <!-- ##################### FIN ADMINISTRACION SGA ########################-->
+
+
+
+        <!--  ============== CARGA HORARIA DOCENTE ============== -->
+
+<!--
+        <li *ngIf="authService.hasRole('ROLE_DOCENTE') || authService.hasRole('ROLE_ADMIN')" class="nav-header">
+          CARGA HORARIA</li>
+        <li
+          *ngIf="(docenteLogin?.cargas_horarias==null || docenteLogin?.cargas_horarias.length==0)  && authService.hasRole('ROLE_DOCENTE')">
+          <a class="nav-link">Sin asignación</a>
+        </li>
+        <li *ngFor="let carga of docenteLogin?.cargas_horarias" class="nav-item has-treeview">
+          <a href="#" class="nav-link">
+            <i class="nav-icon fas fa-book"></i>
+            <p *ngIf="carga.asignatura.etiqueta != null || carga.asignatura.etiqueta == ''">
+              {{carga.asignatura.etiqueta}}
+              <i class="fas fa-angle-left right"></i>
+            </p>
+          
+            <p *ngIf="carga.asignatura.etiqueta == null">
+              {{carga.asignatura.nombre}}
+              <i class="fas fa-angle-left right"></i>
+            </p>
+
+          </a>
+
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a [routerLink]="['/docente/planificacion',carga.id]" class="nav-link">
+                <p>- Información General</p>
+              </a>
+            </li>
+          </ul>
+
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+
+              <a [routerLink]="['/docente/planes-semanales',carga.id]" class="nav-link">
+                <p>- Planes Semanales</p>
+              </a>
+            </li>
+          </ul>
+        </li>
+-->
+
+        <!--============== FIN CARGA HORARIA DOCENTE ==============  -->
+
+
+
+        <!--  ============== SEGUIMIENTO DOCENTE ============== -->
+
+        <!--
+        <li *ngIf="authService.hasRole('ROLE_ADMIN')" class="nav-header">
+          SEGUMIENTO DOCENTE</li>
+        <li *ngIf="authService.hasRole('ROLE_ADMIN')" class="nav-item has-treeview">
+          <a routerLink="/seguimiento-docente" class="nav-link">
+            <i class="nav-icon fas fa-chalkboard-teacher"></i>
+            <p>Planificaciones</p>
+          </a>
+
+        </li>
+
+        <li *ngIf="authService.hasRole('ROLE_ADMIN')" class="nav-item has-treeview">
+          <a routerLink="/configuración-planes" class="nav-link">
+            <i class="nav-icon fas fa-cog"></i>
+            <p>Configuración Planes</p>
+          </a>
+        </li>
+-->
+
+
+        <!--============== FIN SEGUIMIENTO DOCENTE ==============  -->
+
+
+
+
+
+        <!--  ============== ASIGNATURAS ESTUDIANTES ============== -->
+
+        <!--
+        <li *ngIf="authService.hasRole('ROLE_ESTUDIANTE') && asignaturas_matricula.length > 0" class="nav-header">
+          ASIGNATURAS PERIODO</li>
+        <li *ngFor="let asignatura of asignaturas_matricula" class="nav-item has-treeview">
+          <a href="#" class="nav-link">
+            <i class="nav-icon fas fa-book"></i>
+            <p *ngIf="asignatura.asignatura.etiqueta != null || asignatura.asignatura.etiqueta == ''">
+              {{asignatura.asignatura.etiqueta}}
+              <i class="fas fa-angle-left right"></i>
+            </p>
+
+            <p *ngIf="asignatura.asignatura.etiqueta == null">
+              {{asignatura.asignatura.nombre}}
+            </p>
+          </a>
+
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a class="nav-link" style="cursor: pointer;" (click)="irInformacionAsignatura(asignatura)">
+                <p>- Información General</p>
+              </a>
+            </li>
+          </ul>
+
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a class="nav-link" (click)="irPlanesAsignatura(asignatura)" style="cursor: pointer;">
+                <p>- Planes Semanales</p>
+              </a>
+            </li>
+          </ul>
+        </li>
+-->
+        <!--============== FIN CARGA HORARIA DOCENTE ==============  -->
+
+
+
+
+        <!--   --------------EVALUACION DOCENTE ----------- -->
+        <!-- 
+        <li *ngIf="authService.hasRole('ROLE_ADMIN')" class="nav-header">CONFIGURACION EVALUACIÓN</li>
+        <li *ngIf="authService.hasRole('ROLE_ADMIN')" class="nav-item has-treeview">
+          <a href="#" class="nav-link">
+            <i class="nav-icon fas fa-book"></i>
+            <p>
+              Evaluaciones
+              <i class="fas fa-angle-left right"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a routerLink="/evaluacion/form" class="nav-link">
+                <i class="nav-icon fas fa-book-reader"></i>
+                <p>Nueva Evaluacion</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a routerLink="/evaluaciones" class="nav-link">
+                <i class="nav-icon fas fa-book-reader"></i>
+                <p>Evaluaciones</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a routerLink="/clasificaciones" class="nav-link">
+                <i class="nav-icon fas fa-book-reader"></i>
+                <p>Criterios</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a routerLink="/evaluacion/restricciones" class="nav-link">
+                <i class="nav-icon fas fa-book-reader"></i>
+                <p>Restricciones</p>
+              </a>
+            </li>
+          </ul>
+
+        </li>
+-->
+
+        <!--  -------------- PREGUNTAS ----------- -->
+        <!-- 
+        <li *ngIf="authService.hasRole('ROLE_ADMIN')" class="nav-item has-treeview">
+          <a href="#" class="nav-link">
+            <i class="nav-icon fas fa-book"></i>
+            <p>
+              Preguntas
+              <i class="fas fa-angle-left right"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a routerLink="/pregunta/form" class="nav-link">
+                <i class="nav-icon fas fa-book-reader"></i>
+                <p>Nueva Pregunta</p>
+              </a>
+            </li>
+          </ul>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a routerLink="/preguntas" class="nav-link">
+                <i class="nav-icon fas fa-book-reader"></i>
+                <p>Preguntas</p>
+              </a>
+            </li>
+          </ul>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a routerLink="/pregunta/tipos" class="nav-link">
+                <i class="nav-icon fas fa-book-reader"></i>
+                <p>Tipo de Pregunta</p>
+              </a>
+            </li>
+          </ul>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a routerLink="/criterios" class="nav-link">
+                <i class="nav-icon fas fa-book-reader"></i>
+                <p>Dominios y SubDominios</p>
+              </a>
+            </li>
+          </ul>
+        </li>
+-->
+        <!--  ------ RESULTADOS EVALUACION DOCENTE---- -->
+
+        <!-- 
+        <li *ngIf="authService.hasRole('ROLE_ADMIN')" class="nav-item has-treeview">
+          <a routerLink="/resultados" class="nav-link">
+            <i class="nav-icon fas fa-chalkboard-teacher"></i>
+            <p>Resultados Evaluación</p>
+          </a>
+        </li>
+
+-->
+
+        <!--      EVALUAR DOCENTEEEEEE                -->
+
+        <!-- 
+        <li class="nav-header">EVALUACIÓN DOCENTE</li>
+
+        <li *ngIf="evaluaciones==null || evaluaciones?.length==0">
+          <a class="nav-link">Sin asignación</a>
+        </li>
+        <li *ngFor="let evaluacion of evaluaciones" class="nav-item has-treeview evaluaciones">
+          <div *ngIf="evaluacion.clasificacion.nombre=='Autoevaluación' && authService.hasRole('ROLE_DOCENTE')">
+            <a href="#" [routerLink]="['/evaluacion-docente',evaluacion.id]" class="nav-link">
+              <i class="nav-icon fas fa-window-restore"></i>
+              <p>{{evaluacion?.etiqueta}}</p>
+            </a>
+          </div>
+          <div
+            *ngIf="evaluacion.clasificacion.nombre=='Coevaluación - Pares Académicos' && authService.hasRole('ROLE_DOCENTE')">
+            <a href="#" [routerLink]="['/evaluacion-docente',evaluacion.id]" class="nav-link">
+              <i class="nav-icon fas fa-window-restore"></i>
+              <p>{{evaluacion?.etiqueta}}</p>
+            </a>
+          </div>
+          <div *ngIf="evaluacion.clasificacion.nombre=='Heteroevaluación' && authService.hasRole('ROLE_ESTUDIANTE')">
+            <a href="#" [routerLink]="['/evaluacion-docente',evaluacion.id]" class="nav-link">
+              <i class="nav-icon fas fa-window-restore"></i>
+              <p>{{evaluacion?.etiqueta}}</p>
+            </a>
+          </div>
+          <div
+            *ngIf="(evaluacion.clasificacion.nombre=='Coevaluación - Directivos a Docentes') 
+            && (authService.hasRole('ROLE_ADMIN') || authService.hasRole('ROLE_COORD_INVESTIGACION') || authService.hasRole('ROLE_COORD_VINCULACION') || authService.hasRole('ROLE_COORD_CARRERA'))">
+            <a href="#" [routerLink]="['/evaluacion-docente',evaluacion.id]" class="nav-link">
+              <i class="nav-icon fas fa-window-restore"></i>
+              <p>{{evaluacion?.etiqueta}}</p>
+            </a>
+          </div>
+
+        </li>
+      -->
+        
+        <!--  ------------ FIN EVALUACION DOCENTE --------- -->
+
+        <!-- 
+        <li class="nav-item">
+          <a class="nav-link">
+            <p>2020</p>
+          </a>
+        </li>
+        -->
+      </ul>
+
+
+    </nav>
+    <!-- /.sidebar-menu -->
+  </div>
+  <!-- /.sidebar -->
+</aside>

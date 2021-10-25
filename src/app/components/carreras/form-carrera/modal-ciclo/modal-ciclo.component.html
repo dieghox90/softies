@@ -1,0 +1,52 @@
+<div class="modal fade bd-example-modal-xl" data-backdrop="static" data-target="#staticBackdrop" tabindex="-1"
+    role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title w-100 text-center" id="staticBackdropLabel"> NUEVO CICLO
+                </h5>
+
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="font-weight-bold" for="nombre">Nombre</label>
+                    <input [(ngModel)]="ciclo.nombre" class="form-control" type="text" id="nombre" name="nombre">
+                </div>
+
+                <div class="form-group">
+                    <label class="font-weight-bold" for="codigo">Codigo</label>
+                    <input [(ngModel)]="ciclo.codigo" class="form-control" type="text" id="codigo" name="codigo">
+                </div>
+
+                <div class="form-group">
+                    <label class="font-weight-bold" for="peso">Peso</label>
+                    <input [(ngModel)]="ciclo.peso" class="form-control" type="number" id="peso" name="peso">
+                </div>
+
+                <div class="form-group">
+                    <label class="font-weight-bold">Paralelos :</label>
+                    <br>
+                    <div *ngFor="let paralelo of paralelos" class="custom-control custom-checkbox"
+                        style="display: inline-block !important;margin-right: 18px;">
+                        <input [checked]="paralelo.estado"
+                            (change)="ciclo.id ? editarParalelo($event,paralelo):asignarParalelo($event, paralelo)"
+                            class="custom-control-input" type="checkbox" id="{{paralelo.nombre}}"
+                            value="{{paralelo.nombre}}">
+                        <label class="custom-control-label" for="{{paralelo.nombre}}">{{paralelo.nombre}}</label>
+                    </div>
+
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button data-dismiss="modal" (click)="ciclo.id ? '':asignarCiclo()" class="btn btn-info"><i
+                        [ngClass]="ciclo.id ?'fas fa-check-circle':'fas fa-plus'"></i>{{ciclo.id ? ' Aceptar':' Agregar Ciclo'}}
+                </button>
+                <button (click)="ciclo.id ? cancelarEditarCiclo():''" type="button" cl class="btn btn-danger"
+                    data-dismiss="modal"> <i class="fas fa-times-circle"></i>
+                    Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,107 @@
+<div class="modal fade modal-criterio" tabindex="-1" role="dialog" aria-labelledby="modalCriterio" aria-hidden="true"
+    data-backdrop="static" data-target="#staticBackdrop">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title w-100 text-center" id="staticBackdropLabel">
+                    Criterio
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <form>
+                    <div class="form-group">
+                        <label class="font-weight-bold" for="nombre">Nombre</label>
+                        <input [(ngModel)]="criterio.nombre" class="form-control" type="text" id="nombre" name="nombre">
+                    </div>
+                </form>
+
+                <h5 class="text-secondary">Subcriterios</h5>
+                <button class="btn btn-info btn-xs mb-2 mt-0" type="button" data-toggle="collapse"
+                    data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"> <i
+                        class="fas fa-plus"></i>
+                    Agregar
+                </button>
+
+                <div class="collapse" id="collapseExample">
+                    <div class="card card-body bg-secondary">
+                        <h6 class="text-center">Nuevo Subcriterio</h6>
+                        <form>
+                            <div class="form-group">
+                                <label class="font-weight-bold" for="nombre">Nombre</label>
+                                <input [(ngModel)]="subcriterio.nombre" class="form-control" type="text" id="nombre"
+                                    name="nombre">
+                            </div>
+                            <div class="form-group">
+                                <label class="font-weight-bold" for="nombre">Descripcion</label>
+                                <input [(ngModel)]="subcriterio.descripcion" class="form-control" type="text"
+                                    id="nombre" name="nombre">
+                            </div>
+                        </form>
+                        <button data-target="#collapseExample" data-toggle="collapse" (click)="agregar()"
+                            class="btn btn-success btn-sm"><i class="fas fa-check"></i>
+                            Agregar Subcriterios</button>
+
+                    </div>
+                </div>
+
+
+                <div class="alert" style="background: #fff3cd;" role="alert" *ngIf="criterio.subcriterios.length==0">
+                    No hay subcriterios
+                </div>
+
+
+                <table *ngIf="criterio.subcriterios.length>0" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Descripción</th>
+                            <th>Eliminar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <tr ng-form="myForm" *ngFor="let subcriterio of criterio.subcriterios">
+                            <td><input class="form-control" name="subcriterio.nombre" type="text"
+                                    [(ngModel)]="subcriterio.nombre"></td>
+                            <td><input class="form-control" name="subcriterio.descripcion" type="text"
+                                    [(ngModel)]="subcriterio.descripcion">
+                            </td>
+
+                            <td>
+                                <button (click)="eliminar(subcriterio)" class="btn btn-danger btn-sm"> <i
+                                        class="fas fa-times-circle"></i> </button>
+
+                                <span> </span>
+                                <button (click)="eliminar(subcriterio)" class="btn btn-info btn-sm"> <i
+                                        class="fas fa-edit"></i> </button>
+                            </td>
+
+
+                        </tr>
+
+
+                    </tbody>
+
+                </table>
+
+
+                <div class="modal-footer">
+                    <button (click)="criterio.id ? editar():crear()" class="btn btn-primary btn-sm "
+                        data-dismiss="modal">
+                        <i class="fas fa-download"></i>
+                        {{criterio.id ? 'Actualizar':'Guardar'}}</button>
+
+                    <button class="btn btn-warning btn-sm " data-dismiss="modal"> <i class="fas fa-times-circle"></i>
+                        Cancelar</button>
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+</div>

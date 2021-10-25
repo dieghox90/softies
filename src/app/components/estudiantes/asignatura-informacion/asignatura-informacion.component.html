@@ -1,0 +1,79 @@
+<div class="alerta alert-w" style="margin-top: 80px !important;" *ngIf="cargaHoraria?.id==null">
+    Aún no se asigna un Docente para esta asignatura
+</div>
+
+<div *ngIf="cargaHoraria?.id != null">
+    <h3 class="text-center text-secondary py-3">{{cargaHoraria.asignatura.nombre}}</h3>
+
+    <h4 class="text-secondary">Información General</h4>
+    <hr>
+    <table class="table table-striped">
+
+        <tbody>
+            <tr>
+                <th>Docente: </th>
+                <td class="text-left">{{cargaHoraria.docente.nombre}} {{cargaHoraria.docente.apellido}} </td>
+            </tr>
+            <tr>
+                <th>Correo: </th>
+                <td class="text-left">{{cargaHoraria.docente.correo}}</td>
+            </tr>
+
+            <tr>
+                <th>Carrera: </th>
+                <td class="text-left">{{cargaHoraria.asignatura.ciclo.carrera.nombre}}</td>
+            </tr>
+            <tr>
+                <th>Ciclo: </th>
+                <td class="text-left">{{cargaHoraria.asignatura.ciclo.nombre}}</td>
+            </tr>
+            <tr>
+                <th>Paralelo: </th>
+                <td class="text-left">{{cargaHoraria.paralelo.nombre}}</td>
+            </tr>
+
+            <tr>
+                <th>Horas de Docencia: </th>
+                <td class="text-left">{{cargaHoraria.asignatura.numero_docencia}}</td>
+
+            </tr>
+            <tr>
+                <th>Horas de Autonomos: </th>
+                <td class="text-left">{{cargaHoraria.asignatura.numero_autonomos}}</td>
+
+            </tr>
+            <tr>
+                <th>Horas de Experimentacion de los Aprendizajes: </th>
+                <td class="text-left">{{cargaHoraria.asignatura.numero_experimentacion}}</td>
+
+            </tr>
+            <tr>
+                <th>Guía de Estudio</th>
+                <td>
+                    <div class="alerta alert-p" *ngIf="cargaHoraria.planificacion.guia!=null">
+                        <a style="text-decoration: underline"
+                            href="http://localhost:8080/api/upload/{{cargaHoraria.planificacion.ruta_guia+'/'+cargaHoraria.planificacion.guia}}">Documento:
+                            {{cargaHoraria.planificacion.guia}}</a>
+                    </div>
+                    <div class="alerta alert-d" *ngIf="cargaHoraria.planificacion.guia==null">
+                        El docente aún no ha subido la Guia de Estudio
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th>Silabo</th>
+                <td>
+                    <div class="alerta alert-p" *ngIf="cargaHoraria.planificacion.silabo!=null">
+                        <a style="text-decoration: underline"
+                            href="http://localhost:8080/api/upload/{{cargaHoraria.planificacion.ruta_silabo+'/'+cargaHoraria.planificacion.silabo}}">
+                            Documento: {{cargaHoraria.planificacion.silabo}}
+                        </a>
+                    </div>
+                    <div class="alerta alert-d" *ngIf="cargaHoraria.planificacion.silabo==null">
+                        El docente aún no ha subido Silabo
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

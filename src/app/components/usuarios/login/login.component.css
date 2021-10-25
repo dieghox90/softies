@@ -1,0 +1,73 @@
+#contLogin{
+    height: 100vh;
+    width: 100%;
+    position: relative;
+    background: url('https://www.itspm.edu.ec/recursos/login1.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center top;
+}
+
+#contLogin .card{
+    position: absolute;
+    top: 60px;
+    right: 20px;
+    margin: auto;
+    background: rgba(255,255,255,0.8);
+}
+
+
+
+
+header{
+    color:white;position: absolute;top:0;width: 100%;height: 40px;background:#058077;
+}
+
+header p{
+    font-size: 16px;
+    margin-top: 5px;
+}
+
+header p.float-left{
+    padding-left: 20px;    
+}
+
+header p.float-right{
+    padding-right: 20px;    
+}
+
+header p img{
+    margin-top: -5px;
+}
+
+footer{
+    background: #058077;
+    height: 30px;
+    color: white;
+    position: absolute;
+    width: 100%;
+    bottom: 0px;
+    font-size: 10px;
+    text-align: center;
+}
+
+
+
+@media (max-width: 700px) {  
+    #contenedorForm{
+        background:#C7E5EB;
+        height: 100%;
+        width: 100%;
+        display:flex;
+        }
+        
+        #contenedorForm .card{
+        margin:auto;
+        position: relative;
+        top: 0px;
+        right: 0px;
+        background:rgba(255,255,255,1);
+        box-shadow: 5px 5px 5px black;
+        }
+}  
+

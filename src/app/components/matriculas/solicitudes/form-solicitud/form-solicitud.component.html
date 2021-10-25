@@ -1,0 +1,188 @@
+<h3 class="text-center text-secondary py-4">Solicitudes de Matrícula</h3>
+<div class="alerta alert-p">
+    - <b>Importante:</b> No debe enviar una nueva solicitud, debe trabajar sobre la solicitud ya enviada
+    <br>
+    - Si ya cuenta con el documento SIAU, debe subir nuevamente todos los requisitos de la matricula esta vez
+    ya incrementado dicho documento SIAU.
+    <br>
+    - Debes subir una carpeta comprimida, que tenga todos los requisitos solicitados en <a target="_blank"
+        href="https://www.itspm.edu.ec/portal?q=matricula">www.itspm.edu.ec</a>
+    <br>
+    - Para subir el archivo comprimido, en la columna Estado de su solicitud enviada debe salirle la opcion corregir de color naranja, si no tiene esta opción, comuníquese
+    con secretaría.
+</div>
+
+
+
+<div id="accordion">
+    <div class="card">
+        <div class="card-header text-white bg-info" id="headingOne">
+            <h5 class="mb-0">
+                <button class="btn btn-link text-white" data-toggle="collapse" data-target="#collapseOne"
+                    aria-expanded="true" aria-controls="collapseOne">
+                    <ins>Nueva Solicitud </ins> <i class="fas fa-caret-down"></i>
+                </button>
+            </h5>
+        </div>
+
+        <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+            <div class="card-body">
+                <div class="form-group">
+                    <label class="font-weight-bold" for="periodo">Periodo Lectivo</label>
+                    <div>{{periodo}}</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="font-weight-bold" for="periodo">Estudiante</label>
+                    <div>{{solicitud?.estudiante}}</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="font-weight-bold" for="periodo">Carrera</label>
+                    <div>{{solicitud?.carrera}}</div>
+                </div>
+
+                <mat-form-field class="w-100">
+                    <label class="font-weight-bold">Ciclo:</label>
+                    <mat-select [(value)]="ciclo">
+                        <mat-option [value]="undefined">--- Seleccione un Ciclo ---</mat-option>
+                        <mat-option *ngFor="let c of carrera.ciclos" [value]="c">{{c.nombre}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <div class="form-group">
+                    <label class="font-weight-bold">Subir un Archivo (.zip o .rar) máximo 10 MB</label>
+                    <div>
+                        <div class="custom-file">
+                            <input #inputGuia (change)="seleccionarArchivo($event,'guia')" type="file"
+                                id="inputGroupFile04">
+                            <br>
+
+                        </div>
+
+                        <div *ngIf="progreso > 0" class="progress" style="height: 8px;">
+                            <div class="progress-bar progress-bar-striped" role="progressbar"
+                                [ngStyle]="{width:progreso+'%'}" attr.aria-valuenow="{{progreso}}" aria-valuemin="0"
+                                aria-valuemax="100">
+                                {{progreso}}%
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+                </div>
+
+                <button class="btn btn-primary w-100" (click)="guardar()"><i class="fas fa-share-square"></i>
+                    Enviar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header text-white bg-secondary" id="headingTwo">
+            <h5 class="mb-0">
+                <button class="btn btn-link collapsed text-white" data-toggle="collapse" data-target="#collapseTwo"
+                    aria-expanded="false" aria-controls="collapseTwo">
+                    <ins>Solicitudes enviadas </ins> <i class="fas fa-caret-down"></i>
+                    <span *ngIf="solicitudes?.length==0" class="badge badge-light" style="margin-left: 6px;">
+                        {{solicitudes.length}}</span>
+                    <span *ngIf="solicitudes?.length > 0" class="badge badge-primary" style="margin-left: 6px;">
+                        {{solicitudes.length}}</span>
+                </button>
+            </h5>
+        </div>
+        <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordion">
+            <div class="card-body">
+                <div class="alerta alert-w" *ngIf="solicitudes?.length == 0">
+                    No ha enviado ninguna solicitud todavía
+                </div>
+
+                <div *ngIf="solicitudes?.length != 0">
+
+                    <h3 class="text-center text-secondary py-3">Estado de Solicitudes</h3>
+
+                    <table class="table table-striped">
+
+                        <thead style="text-align: center;font-size: 13px;">
+                            <tr>
+                                <th>Carrera</th>
+                                <th>Ciclo</th>
+                                <th>Última Modificación</th>
+                                <th>Archivo</th>
+                                <th>Estado</th>
+                                <th>Correcciones</th>
+
+                            </tr>
+                        </thead>
+
+                        <tbody style="font-size: 15px;text-align: center;">
+                            <tr *ngFor="let solicitud of solicitudes">
+                                <td>{{solicitud.carrera}}</td>
+                                <td>{{solicitud.ciclo}}</td>
+                                <td>{{solicitud.fecha_modificacion| date:"dd-MM-yyyy HH:mm"}}</td>
+                                <td><a style="text-decoration: underline" *ngIf="solicitud.archivo!=null"
+                                        href="https://www.itspm.edu.ec:8443/api/upload/{{solicitud.ruta+'/'+solicitud.archivo}}">Archivo:
+                                        {{solicitud.archivo}}</a>
+                                    <br>
+                                    <div *ngIf="solicitud.tipo=='Corregir'">
+                                        <div style="font-size: 12px;" class="bg-warning">Suba un nuevo archivo con las
+                                            correcciones (10 MB)</div>
+
+                                        <div *ngIf="progreso > 0" class="progress" style="height: 8px;">
+                                            <div class="progress-bar progress-bar-striped" role="progressbar"
+                                                [ngStyle]="{width:progreso+'%'}" attr.aria-valuenow="{{progreso}}"
+                                                aria-valuemin="0" aria-valuemax="100">
+                                                {{progreso}}%
+                                            </div>
+                                        </div>
+
+
+                                        <input style="font-size: 12px;" #inputGuia
+                                            (change)="seleccionarArchivo($event,'guia')" type="file"
+                                            id="inputGroupFile04">
+                                        <button class="btn btn-primary btn-xs w-100"
+                                            (click)="corregirArchivo(solicitud)"><i class="fas fa-cloud-upload-alt"></i>
+                                            Subir</button>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div *ngIf="solicitud.tipo=='Corregir'" class="badge badge-warning">
+                                        {{solicitud.tipo}}
+                                    </div>
+
+                                    <div *ngIf="solicitud.tipo=='En revisión'" class="badge badge-secondary">
+                                        {{solicitud.tipo}}
+                                    </div>
+
+                                    <div *ngIf="solicitud.tipo=='Corregido'" class="badge badge-primary">
+                                        {{solicitud.tipo}}
+                                    </div>
+                                    <div *ngIf="solicitud.tipo=='Matriculado'" class="badge badge-success">
+                                        {{solicitud.tipo}}
+                                    </div>
+                                    <div *ngIf="solicitud.tipo=='Documentos Aprobados'" class="badge badge-info">
+                                        {{solicitud.tipo}}
+                                    </div>
+                                </td>
+
+
+                                <td>
+                                    <div *ngIf="solicitud.observaciones==null">
+                                        Ninguna
+                                    </div>
+                                    <div *ngIf="solicitud.observaciones!=null">
+                                        {{solicitud.observaciones}}
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

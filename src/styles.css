@@ -1,0 +1,62 @@
+@import "~ng-pick-datetime/assets/style/picker.min.css";
+@import '@angular/material/prebuilt-themes/deeppurple-amber.css';
+
+/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/* ------------- menu top ---------------*/
+.layout-navbar-fixed .wrapper .main-header{
+    background:#0A8FCC;
+}
+
+.layout-navbar-fixed .wrapper .main-header ul li a{
+    color:white;
+}
+
+
+.layout-navbar-fixed .wrapper .main-header ul li a:hover{
+    color:#ddd;
+}
+
+.layout-navbar-fixed .wrapper .main-header ul li a:active{
+    color:#ddd;
+}
+
+/* ------------- CSS PERSONALIZADO ---------------*/
+.alerta{
+    position: relative;
+    padding: .75rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+}
+.alert-w{
+    color: #856404;
+    background-color: #fff3cd;
+    border-color: #ffeeba;
+}
+.alert-p{
+    color: #004085;
+    background-color: #cce5ff;
+    border-color: #b8daff;
+}
+
+.alert-s{
+    color: #383d41;
+    background-color: #e2e3e5;
+    border-color: #d6d8db;
+}
+
+.alert-su{
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb
+}
+
+.alert-d{
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}

@@ -1,0 +1,30 @@
+<h3 class="text-center text-secondary py-3">{{titulo}}</h3>
+<table class="table table-striped">
+    <thead class="bg-info text-white">
+        <tr>
+            <th>Nombre</th>
+            <th>Código</th>
+            <th>Ciclos</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr *ngFor="let carrera of carreras">
+            <td>{{carrera.nombre}}</td>
+            <td>{{carrera.codigo}}</td>
+            <td><button (click)="irModal(carrera)" data-toggle="modal" data-target=".bd-example-modal-xl"
+                    class="btn btn-secondary btn-sm"><strong>{{carrera.ciclos.length}} </strong>
+                    <i class="fas fa-eye"></i>
+                </button>
+            </td>
+            <td>
+                <button [routerLink]="['/carrera/form',carrera.id]" class="btn-sm btn btn-primary btn-sm"> <i
+                        class="fas fa-edit"></i> Editar</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+
+<app-modal-carrera></app-modal-carrera>

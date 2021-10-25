@@ -1,0 +1,52 @@
+<div class="modal fade detalleMatricula" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-center w-100" id="exampleModalLabel">Detalle Matricula</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+
+                <div class="form-group">
+                    <label class="font-weight-bold">Estudiante:</label>
+                    <div class="text-center">{{matriculaDetalle?.estudiante?.apellido}}
+                        {{matriculaDetalle?.estudiante?.nombre}}</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="font-weight-bold">Carrera:</label>
+                    <div class="text-center">{{matriculaDetalle?.paralelo?.ciclo?.carrera?.nombre}}</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="font-weight-bold">Ciclo:</label>
+                    <div class="text-center">{{matriculaDetalle?.paralelo?.ciclo?.nombre}}</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="font-weight-bold">Ciclo:</label>
+                    <div class="text-center">{{matriculaDetalle?.paralelo?.nombre}}</div>
+                </div>
+
+                <div class="form-group">
+                    <h4 class="text-center bg-primary">Asignaturas</h4>
+                    <ul class="list-group">
+                        <li class="list-group-item" *ngFor="let detalle of matriculaDetalle?.matriculas_asignaturas">
+                            {{detalle?.asignatura?.nombre}}
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fas fa-sign-out-alt"></i>
+                    Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>

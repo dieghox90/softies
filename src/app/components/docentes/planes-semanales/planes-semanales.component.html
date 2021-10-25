@@ -1,0 +1,121 @@
+<h3 class="text-center text-secondary py-3">{{cargaHoraria?.asignatura?.nombre}}</h3>
+
+<h4 class="text-secondary">Planes Semanales</h4>
+<div *ngIf="cargaHoraria?.planificacion?.id==null" class="alerta alert-w">
+    Debe subir primero el silabo o la guia de la Asignatura, en Informacion General
+</div>
+
+<div *ngIf="cargaHoraria?.planificacion?.id">
+
+    <button (click)="incrementarSemana()" class="btn btn-warning my-3"> <i class="fas fa-plus"></i> Añadir
+        Semana</button>
+
+    <div class="accordion" id="accordionExample">
+        <div class="card" *ngFor=" let plan of cargaHoraria?.planificacion?.planes_semanales;let i = index">
+            <div class="card-header "
+                [ngClass]="{'bg-secondary': plan?.creado_manual === null || plan?.creado_manual === false, 'bg-warning': plan?.creado_manual === true }"
+                id=" headingOne">
+
+                <button class="btn btn-link text-white" type="button" data-toggle="collapse"
+                    attr.data-target="#plan{{i}}" aria-expanded="true" aria-controls="collapseOne">
+                    <span style="text-decoration: underline;">
+                        <strong>Semana: </strong>{{plan.numero_semana}}
+                    </span>
+                    <i class="fas fa-chevron-circle-down"></i>
+                </button>
+
+
+                <button *ngIf="plan?.creado_manual===true" (click)="eliminar(plan)" type="button"
+                    class="btn btn-danger btn-sm float-right">
+                    Eliminar <i class="fas fa-times-circle"></i>
+                </button>
+            </div>
+
+            <div id="plan{{i}}" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+                <div class="card-body">
+
+
+                    <div class="card">
+                        <div class="card-header bg-primary">
+                            Datos del plan Semanal
+                        </div>
+
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="">Fecha de Inicio</label>
+                                <br>
+                                <span *ngIf="plan?.fecha_inicio" style="font-size: 14px;" class="badge badge-info">
+                                    {{plan.fecha_inicio | date:"dd-MMM-yyyy"}}
+                                </span>
+
+                                <span *ngIf="!plan?.fecha_inicio" style="font-size: 14px;" class="badge badge-warning">
+                                    No configurada
+                                </span>
+
+                            </div>
+
+                            <div class="form-group">
+                                <label for="">Fecha de Finalización</label>
+                                <br>
+                                <span *ngIf="plan?.fecha_inicio" style="font-size: 14px;" class="badge badge-info">
+                                    {{plan.fecha_fin | date:"dd-MMM-yyyy"}}
+                                </span>
+                                <span *ngIf="!plan?.fecha_fin" style="font-size: 14px;" class="badge badge-warning">
+                                    No configurada
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="card">
+                        <div class="card-header bg-primary">
+                            Documento Subido
+                        </div>
+
+                        <div class="card-body">
+                            <div *ngIf="plan?.plan==null" class="alerta alert-w">
+                                No ha subido el plan de la semana {{plan?.numero_semana}}
+                            </div>
+
+                            <div *ngIf="plan?.plan!=null" class="alerta alert-su">
+                                <a style="text-decoration: underline"
+                                    href="http://localhost:8080/api/upload/{{plan?.ruta+'/'+plan?.plan}}">
+                                    {{plan?.plan}}</a>
+
+                            </div>
+
+
+                            <hr>
+                            <span class="badge badge-secondary my-1">
+                                {{plan?.plan ? 'Actualizar Documento':'Subir Documento'}}
+                            </span>
+                            <div class="custom-file">
+                                <input #inputGuia (change)="seleccionarArchivo($event,'plan',plan)" type="file"
+                                    id="inputGroupFile04">
+                                <br>
+                                <button (click)="subirArchivo()" [disabled]="!archivoSeleccionado"
+                                    class="btn btn-success btn-sm" type="button" id="inputGroupFileAddon04">
+
+                                    {{plan?.plan ? 'Actualizar':'Subir'}}
+                                </button>
+                            </div>
+
+                            <div *ngIf="progreso > 0" class="progress" style="height: 5px;">
+                                <div class="progress-bar progress-bar-striped" role="progressbar"
+                                    [ngStyle]="{width:progreso+'%'}" attr.aria-valuenow="{{progreso}}" aria-valuemin="0"
+                                    aria-valuemax="100">
+                                    {{progreso}}%
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

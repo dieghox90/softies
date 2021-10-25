@@ -1,0 +1,51 @@
+<h3 class="text-center text-secondary py-4">ESTUDIANTES</h3>
+
+
+<div class="form-group">
+
+    <input type="text" [(ngModel)]="cedula" class="form-control" placeholder="buscar por cédula">
+
+    <button (click)="buscarCedula()" class="btn btn-secondary btn-xs"> <i class="fas fa-search"></i> Buscar
+    </button>
+</div>
+
+<table class="table table-striped">
+    <thead class="bg-info text-white">
+        <tr>
+            <th>Nro.</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Cédula</th>
+            <th>Correo</th>
+            <th>Celular</th>
+            <th *ngIf="authService.hasRole('ROLE_ADMIN')">Acciones</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr *ngFor="let estudiante of estudiantes; index as i">
+            <td>{{ i + 1 }}</td>
+            <td>{{ estudiante.nombre }}</td>
+            <td>{{ estudiante.apellido }}</td>
+            <td>{{ estudiante.cedula }}</td>
+            <td>{{ estudiante.correo }}</td>
+            <td>{{ estudiante.celular }}</td>
+            <td *ngIf="authService.hasRole('ROLE_ADMIN')">
+                <button [routerLink]="['/estudiante/form',estudiante.id]" class="btn-sm btn btn-primary">Editar</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="row bg-info text-white !important">
+    <div class="col-sm-6" style="display: flex;justify-content: center">
+        <mat-paginator class="bg-info text-white" showFirstLastButtons (page)="paginar($event)"
+            [pageIndex]="paginaActual" [length]="totalRegistros" [pageSize]="totalPorPagina"
+            [pageSizeOptions]="pageSizeOptions">
+        </mat-paginator>
+    </div>
+    <div class="col-sm-6" style="display: flex;justify-content: center;font-size: 14px;">
+        <p>Total de Registros: <strong>{{totalRegistros}}</strong></p>
+    </div>
+
+</div>

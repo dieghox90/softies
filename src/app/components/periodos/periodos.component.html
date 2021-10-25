@@ -1,0 +1,25 @@
+<h3 class="text-center text-secondary py-3">{{titulo}}</h3>
+<table class="table table-striped">
+    <thead class="bg-info text-white text-center">
+        <tr>
+            <th>Periodo Académico</th>
+            <th>Fecha de Inicio</th>
+            <th>Fecha de Culminación</th>
+            <th>Matriculados</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+
+    <tbody class="text-center">
+        <tr *ngFor="let periodo of periodos">
+            <td>{{periodo.periodo_academico}}</td>
+            <td>{{periodo.fecha_inicio | date:"dd-MMM-yyyy"}}</td>
+            <td>{{periodo.fecha_fin | date:"dd-MMM-yyyy"}}</td>
+            <td>{{periodo.total_matriculas}}</td>
+            <td><button [routerLink]="['/periodo/form',periodo.id]" class="btn btn-primary btn-sm">
+                    <i class="fas fa-pencil-alt"></i>
+                    Editar
+                </button></td>
+        </tr>
+    </tbody>
+</table>

@@ -1,0 +1,63 @@
+<div class="modal fade modal-restriccion" tabindex="-1" role="dialog" aria-labelledby="modalRestriccion"
+    aria-hidden="true" data-backdrop="static" data-target="#staticBackdrop">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title w-100 text-center" id="staticBackdropLabel">
+                    Restricción
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label class="font-weight-bold" for="docente">Evaluacion</label>
+                        <div>{{evaluacion?.clasificacion.nombre}}</div>
+
+                    </div>
+                    <div class="form-group">
+                        <label class="font-weight-bold" for="docente">Seleccione Evaluador</label>
+                        <select [compareWith]="compararEvaluador" name="docente" id="docente" [(ngModel)]="docente"
+                            class="form-control">
+                            <option [value]="">---
+                                Seleccione un Docente ---</option>
+                            <option *ngFor="let e of docentes" [ngValue]="e">{{e.nombre}} {{e.apellido}}
+                            </option>
+
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="font-weight-bold" for="evaluado">Seleccione Evaluados</label>
+                        <div *ngIf="docente?.id">
+                            <div class="form-group">
+                                <div class="custom-control custom-checkbox" *ngFor="let evaluado of evaluados">
+                                    <input (change)="seleccionarEvaluados($event,evaluado)" type="checkbox"
+                                        class="custom-control-input" id="{{evaluado.nombre_evaluado}}"
+                                        [checked]="evaluado.estado" value="{{evaluado.nombre_evaluado}}">
+                                    <label class="custom-control-label"
+                                        for="{{evaluado.nombre_evaluado}}">{{evaluado.nombre_evaluado}}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="modal-footer">
+                    <button (click)="evaluador?.evaluados ? editar():crear()" class="btn btn-primary btn-sm "
+                        data-dismiss="modal">
+                        <i class="fas fa-download"></i>
+                        {{evaluador?.evaluados ? 'Actualizar':'Guardar'}}</button>
+
+                    <button class="btn btn-warning btn-sm " data-dismiss="modal"> <i class="fas fa-times-circle"></i>
+                        Cancelar</button>
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+</div>

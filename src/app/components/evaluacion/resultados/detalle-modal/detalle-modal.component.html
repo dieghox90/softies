@@ -1,0 +1,48 @@
+<div class=" modal fade bd-example-modal-xl" id="modalDetalleEva" data-backdrop="static" data-target="#staticBackdrop"
+    role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title w-100 text-center" id="staticBackdropLabel"> Detalle de Resultados <br>
+                </h5>
+            </div>
+            <div class="modal-body">
+                <div *ngFor="let criterio of criterios">
+                    <div class="alerta alert-p text-center">
+                        <strong>Dominio: {{criterio.nombre}}</strong>
+                    </div>
+
+                    <div *ngFor="let subcriterio of criterio.subcriterios">
+                        <span class="badge badge-success">Subdominio: {{subcriterio.nombre}}</span>
+
+                        <div *ngFor="let pregunta of subcriterio.preguntas; let i = index">
+
+                            <div *ngIf="pregunta.resultados.length > 0">
+                                <strong>Pregunta: </strong>{{pregunta.enunciado}}
+
+                                <br>
+                                <strong>Resultados: </strong>
+                                <div *ngFor="let resultado of pregunta.resultados">
+                                    <i>{{resultado.nombre}}: {{resultado.total}}</i>
+                                    <br>
+                                </div>
+                                <hr>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" cl class="btn btn-danger" data-dismiss="modal"> <i
+                        class="fas fa-times-circle btn-sm"></i>
+                    Cerrar</button>
+
+            </div>
+        </div>
+    </div>
+</div>

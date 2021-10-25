@@ -1,0 +1,147 @@
+<h3 id="a" class="text-center text-secondary py-3">Configuración Planes Semanales</h3>
+
+<span class="badge badge-info" style="font-size: 14px;">Periodo:</span>
+<p>{{nombrePeriodo}}</p>
+
+
+
+<button class="btn btn-primary " type="button" data-toggle="modal" data-target=".modal-configuracion"
+    aria-expanded="false" aria-controls="collapseExample">
+    <i class="fas fa-plus-circle"></i>
+    Nueva Configuración Semanal
+
+</button>
+
+
+<h4 class="text-secondary my-4">Configuraciones Ingresadas</h4>
+
+<div *ngIf="configuracionesPlanes==null || configuracionesPlanes.length==0" class="alerta alert-w">
+    No existen configuraciones para el periodo seleccionado
+</div>
+
+
+<div class="table-responsive-sm">
+    <table *ngIf="configuracionesPlanes?.length>0" class="table table-striped">
+        <thead>
+            <tr>
+                <th>Numero de Semana</th>
+                <th>Fecha de Inicio</th>
+                <th>Fecha de Finalización</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let config of configuracionesPlanes">
+                <td>{{config?.numero_semana}}</td>
+                <td>{{config?.fecha_inicio | date:"dd-MMM-yyyy"}}</td>
+                <td>{{config?.fecha_fin | date:"dd-MMM-yyyy"}}</td>
+                <td>
+                    <button (click)="fijarConfiguracion(config)" class=" btn btn-info btn-sm" data-toggle="modal"
+                        data-target=".modal-configuracion">
+                        <i class="fas fa-edit"></i> Editar
+                    </button>
+
+                    <button (click)="eliminar(config)" class="btn btn-danger btn-sm">
+                        <i class="fas fa-times-circle"></i> Eliminar
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+
+
+<!-- -------  MODAL --------- -->
+
+<div class="modal fade modal-configuracion" tabindex="-1" role="dialog" aria-labelledby="modalClasificacion"
+    aria-hidden="true" data-backdrop="static" data-target="#staticBackdrop">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title w-100 text-center" id="staticBackdropLabel">
+                    {{configuracionPlanes?.id!=null ? 'Actualizar Configuración':'Nueva Configuración'}}
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="form-group">
+                    <label for="semena">Semana</label>
+                    <input type="number" [(ngModel)]="configuracionPlanes.numero_semana" class="form-control"
+                        placeholder="1,2,3....">
+                </div>
+
+                <div class="form-group">
+                    <label class="font-weight-bold" for="fecha_inicio">Fecha de Inicio</label>
+                    <br>
+                    <input type="datetime" style="width: 80%;display: inline;" [matDatepicker]="matFechaInicio"
+                        class="form-control" [(ngModel)]="configuracionPlanes.fecha_inicio" name="fecha_inicio"
+                        id="fecha_inicio">
+                    <mat-datepicker-toggle [for]="matFechaInicio"></mat-datepicker-toggle>
+                    <mat-datepicker #matFechaInicio></mat-datepicker>
+                </div>
+
+                <div class="form-group">
+                    <label class="font-weight-bold" for="fecha_fin">Fecha de Finalización</label>
+                    <br>
+                    <input type="datetime" style="width:80%;display: inline;" [matDatepicker]="matFechaFin"
+                        class="form-control" [(ngModel)]="configuracionPlanes.fecha_fin" name="fecha_fin"
+                        id="fecha_fin">
+                    <mat-datepicker-toggle [for]="matFechaFin"></mat-datepicker-toggle>
+                    <mat-datepicker #matFechaFin></mat-datepicker>
+                </div>
+
+                <div class="modal-footer">
+                    <button (click)="configuracionPlanes?.id!=null ? actualizar():guardar()" class="btn btn-info">
+                        <i class="fas fa-download"></i>
+                        {{configuracionPlanes?.id!=null ? 'Editar':'Guardar'}}
+
+                    </button>
+                    <button class="btn btn-warning" (click)="cancelarEdicion()" data-dismiss="modal"> <i
+                            class="fas fa-times-circle"></i>
+                        Cancelar</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!--   MATERIAL TABLA RESPONSIVA      -->
+<!--
+<div class="mat-elevation-z8">
+    <table mat-table [dataSource]="configuracionesPlanes">
+
+      
+        <ng-container matColumnDef="numero_semana">
+            <th mat-header-cell *matHeaderCellDef> Número de Semana </th>
+            <td mat-cell *matCellDef="let element"> {{element.numero_semana}} </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="fecha_inicio">
+            <th mat-header-cell *matHeaderCellDef> Fecha Inicio </th>
+            <td mat-cell *matCellDef="let element"> {{element.fecha_inicio | date:"dd-MMM-yyyy"}} </td>
+        </ng-container>
+
+
+
+        <ng-container matColumnDef="fecha_fin">
+            <th mat-header-cell *matHeaderCellDef> Fecha Fin </th>
+            <td mat-cell *matCellDef="let element"> {{element.fecha_fin | date:"dd-MMM-yyyy"}} </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    </table>
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+
+</div>-->
