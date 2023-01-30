@@ -2,7 +2,7 @@
 
 Desarrollado por Diego Guaman, docente del IST Primero de Mayo, ciudad Yantzaza - Provincia de Zamora Chinchipe
 
-# Dashboard para las IES del Ecuador
+# Resumen
 
 Este sistema permite administrar completamente las actividades administrativas y académicas de las Instituciones de Educación Superior, se ha tenido como guía el RRA(Reglamento de Régimen Académico) por tal motivo; cualquier Institución pública o privada puede implementarlo, adicionalmente se ha añadido el módulo de evaluación docente con los componentes de : Autoevaluación, Heteroevaluación y Coevaluación.
 
